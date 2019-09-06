@@ -32,6 +32,9 @@ import Foundation
 
 //  Name: [Initiative: Int, Dex: Int, AC: Int, HP: Int, Status:]
 
+//  Handle HP or participating status if defeated?  Options like unconscious or remove from battle?
+//  Can HP go to negative?
+
 var gameLog: [String] = []
 
 
@@ -55,11 +58,11 @@ func confirm() -> Bool {
 class Characters {
     let charName: String
     let initiative: Int
-    var dexterityMod: Int?  //  can this change halfway through a battle?
+    var dexterity: Int?  //  can this change halfway through a battle?
     var hitPoints: Int
     var armorClass: Int  //  can this change halfway through a battle?
     var statuses: [String] = []
-    var conscious: Bool = true
+    var participating: Bool = true
     var changeLog: [String] = []
 
     
@@ -68,51 +71,96 @@ class Characters {
         initiative = ini
         hitPoints = HP
         armorClass = AC
-        changeLog.append("Initialized with Character Name: \(name), Initiative: \(ini), HP: \(HP), AC: \(AC)")
-        gameLog.append("\(name) has entered the fight with [\(HP)] HP!")
+        changeLog.append("Character: \(name), Initiative: \(ini), HP: \(HP), AC: \(AC)")
+        gameLog.append("\(name) has entered the fight with [\(HP) HP]!")
+        print(changeLog.last as Any)
     }
     
-    func sameInitiative(dexMod: Int) {
-        print("Dexterity Modifier of [\(dexMod)] for \(charName)?")
-        let result = confirm()
+    func sameInitiative(dex: Int) {
+        print("Dexterity of [\(dex)] for \(charName)?")
+        let result: Bool = confirm()
         if result == true {
-            dexterityMod = dexMod
-            changeLog.append("Dexterity Mod added: \(dexMod)")
+            dexterity = dex
+            changeLog.append("\(charName):  Dexterity stat added [\(dex)]")
+            print(changeLog.last as Any)
         }
     }
     
     func addStatus(stat: String) {
         print("Add status effect of [\(stat)] to \(charName)?")
-        let result = confirm()
+        let result: Bool = confirm()
         if result == true {
             statuses.append(stat)
-            changeLog.append("Added Status: \(stat)")
             gameLog.append("\(charName) has status effect: [\(stat)]!")
+            changeLog.append("\(charName) has status effect: [\(stat)]")
+            print(changeLog.last as Any)
         }
-        
     }
     
     func removeStatus(stat: String) {
-        guard let index = self.statuses.firstIndex(of: stat) else { return }
+        guard let index = self.statuses.firstIndex(of: stat) else {
+            print("Status: [\(stat)] not found")
+            return
+        }
         self.statuses.remove(at: index)
         gameLog.append("\(charName) no longer has status effect: [\(stat)]!")
+        changeLog.append("\(charName) no longer has status effect: [\(stat)]")
+        print(changeLog.last as Any)
     }
     
     func modHitpoints(mod: String) {
         let cleanString: String = mod.replacingOccurrences(of: " ", with: "")
         
         if let modifier: Int = Int(cleanString) {
-            hitPoints += modifier
+            
+            if modifier > 0 {
+                print("\(charName)'s HP: \(hitPoints) +\(abs(modifier)) -> [\(Int(hitPoints + modifier))]?")
+                let result: Bool = confirm()
+                
+                if result == true {
+                    hitPoints += modifier
+                    gameLog.append("\(charName) has gained \(abs(modifier)) HP up to a total of [\(hitPoints)]")
+                    changeLog.append("\(charName)'s HP: [\(hitPoints)] (gained \(modifier))")
+                    print(changeLog.last as Any)
+                }
+                
+            } else {
+                print("\(charName)'s HP: \(hitPoints) -\(abs(modifier)) -> [\(Int(hitPoints + modifier))]?")
+                let result: Bool = confirm()
+                
+                if result == true {
+                    hitPoints += modifier
+                    gameLog.append("\(charName) has lost \(abs(modifier)) HP down to a total of [\(hitPoints)]!")
+                    changeLog.append("\(charName)'s HP: [\(hitPoints)] (lost \(abs(modifier))")
+                }
+            }
         }
-        
-       
     }
     
-    func consciousState(trueFalse state: Bool) {
-        self.conscious = state
+    func participant(trueFalse state: Bool) {
+        if state == false {
+            print("Remove \(charName) from battle?")
+            let result = confirm()
+            if result == true {
+                participating = state
+                gameLog.append("\(charName) is out of battle!")
+                changeLog.append("\(charName) is removed from battle")
+                print(changeLog.last as Any)
+            }
+        } else {
+            print("Return \(charName) to battle?")
+            let result = confirm()
+            if result == true {
+                participating = state
+                gameLog.append("\(charName) is back in the fight!")
+                changeLog.append("\(charName) is added back to battle")
+                print(changeLog.last as Any)
+            }
+        }
     }
     
 }
 
 var order: [[String: Characters]] = []
 var currentTurn: [[String: Characters]] = []  //  Copies order when finished all turns
+
