@@ -30,10 +30,7 @@ import Foundation
  
  */
 
-//  Name: [Initiative: Int, Dex: Int, AC: Int, HP: Int, Status:]
-
-//  Handle HP or participating status if defeated?  Options like unconscious or remove from battle?
-//  Can HP go to negative?
+//  Consider adding max HP?  Might take away from the game if entering too much info
 
 var gameLog: [String] = []
 
@@ -60,36 +57,43 @@ class Characters {
     let initiative: Int
     var dexterity: Int?  //  can this change halfway through a battle?
     var hitPoints: Int
+    var maxHitPoints: Int
     var armorClass: Int  //  can this change halfway through a battle?
     var statuses: [String] = []
     var participating: Bool = true
     var changeLog: [String] = []
 
     
-    init(name: String, ini: Int, HP: Int, AC: Int) {
+    init(name: String, ini: Int, HP: Int, maxHP: Int, AC: Int) {
         charName = name
         initiative = ini
         hitPoints = HP
+        maxHitPoints = maxHP
         armorClass = AC
-        changeLog.append("Character: \(name), Initiative: \(ini), HP: \(HP), AC: \(AC)")
-        gameLog.append("\(name) has entered the fight with [\(HP) HP]!")
+        changeLog.append("Character: \(charName), Initiative: \(initiative)" +
+            ", HP: \(hitPoints) / \(maxHitPoints), AC: \(armorClass)")
+        gameLog.append("\(charName) has entered the fight with " +
+            "[\(hitPoints) / \(maxHitPoints) HP]!")
         print(changeLog.last as Any)
     }
     
+    
     func sameInitiative(dex: Int) {
-        print("Dexterity of [\(dex)] for \(charName)?")
-        let result: Bool = confirm()
-        if result == true {
+        print("Dexterity of [\(dex)] for \(charName)?  y/n")
+        
+        if confirm() == true {
             dexterity = dex
-            changeLog.append("\(charName):  Dexterity stat added [\(dex)]")
+            changeLog.append("\(charName):  Dexterity stat added " +
+                "[\(dexterity as Any)]")
             print(changeLog.last as Any)
         }
     }
     
+    
     func addStatus(stat: String) {
-        print("Add status effect of [\(stat)] to \(charName)?")
-        let result: Bool = confirm()
-        if result == true {
+        print("Add status effect of [\(stat)] to \(charName)?  y/n")
+        
+        if confirm() == true {
             statuses.append(stat)
             gameLog.append("\(charName) has status effect: [\(stat)]!")
             changeLog.append("\(charName) has status effect: [\(stat)]")
@@ -97,60 +101,43 @@ class Characters {
         }
     }
     
+    
     func removeStatus(stat: String) {
-        guard let index = self.statuses.firstIndex(of: stat) else {
+        guard let index = statuses.firstIndex(of: stat) else {
             print("Status: [\(stat)] not found")
             return
         }
-        self.statuses.remove(at: index)
-        gameLog.append("\(charName) no longer has status effect: [\(stat)]!")
-        changeLog.append("\(charName) no longer has status effect: [\(stat)]")
-        print(changeLog.last as Any)
+        
+        print("Remove status effect of [\(stat)] from \(charName)?  y/n")
+        
+        if confirm() == true {
+            self.statuses.remove(at: index)
+            gameLog.append("\(charName) no longer has status effect: " +
+                "[\(stat)]!")
+            changeLog.append("\(charName) no longer has status effect: " +
+                "[\(stat)]")
+            print(changeLog.last as Any)
+        }
+        
     }
     
-    func modHitpoints(mod: String) {
-        let cleanString: String = mod.replacingOccurrences(of: " ", with: "")
-        
-        if let modifier: Int = Int(cleanString) {
-            
-            if modifier > 0 {
-                print("\(charName)'s HP: \(hitPoints) +\(abs(modifier)) -> [\(Int(hitPoints + modifier))]?")
-                let result: Bool = confirm()
-                
-                if result == true {
-                    hitPoints += modifier
-                    gameLog.append("\(charName) has gained \(abs(modifier)) HP up to a total of [\(hitPoints)]")
-                    changeLog.append("\(charName)'s HP: [\(hitPoints)] (gained \(modifier))")
-                    print(changeLog.last as Any)
-                }
-                
-            } else {
-                print("\(charName)'s HP: \(hitPoints) -\(abs(modifier)) -> [\(Int(hitPoints + modifier))]?")
-                let result: Bool = confirm()
-                
-                if result == true {
-                    hitPoints += modifier
-                    gameLog.append("\(charName) has lost \(abs(modifier)) HP down to a total of [\(hitPoints)]!")
-                    changeLog.append("\(charName)'s HP: [\(hitPoints)] (lost \(abs(modifier))")
-                }
-            }
-        }
-    }
     
     func participant(trueFalse state: Bool) {
+        
         if state == false {
             print("Remove \(charName) from battle?")
-            let result = confirm()
-            if result == true {
+            
+            if confirm() == true {
                 participating = state
                 gameLog.append("\(charName) is out of battle!")
                 changeLog.append("\(charName) is removed from battle")
                 print(changeLog.last as Any)
             }
+            
         } else {
             print("Return \(charName) to battle?")
-            let result = confirm()
-            if result == true {
+            
+            if confirm() == true {
                 participating = state
                 gameLog.append("\(charName) is back in the fight!")
                 changeLog.append("\(charName) is added back to battle")
@@ -159,6 +146,92 @@ class Characters {
         }
     }
     
+    
+    func modHitpoints(mod: String) {
+        
+        //  handle going over max as choice
+        //  perhaps a confirmation choice that will go over max
+        
+        func gainHP(change: Int) {
+            print("\(charName)'s HP: \(hitPoints) +\(abs(change)) " +
+                "-> [\(Int(hitPoints + change))]?  y/n")
+            
+            if confirm() == true {
+                hitPoints += change
+                gameLog.append("\(charName) has gained \(abs(change)) " +
+                    "HP up to a total of [\(hitPoints)]")
+                changeLog.append("\(charName)'s HP: [\(hitPoints)] " +
+                    "(gained \(change))")
+                print(changeLog.last as Any)
+            }
+        }
+        
+        
+        func zeroOrBelowHP() {
+            var awaitingInputA: Bool = true
+            
+            while awaitingInputA == true {
+                print("\(charName) has lost all hitpoints.")
+                print("[r]emove or [u]nconscious?")
+                var awaitingInputB: Bool = true
+                
+                while awaitingInputB == true {
+                    let input: String? = readLine()
+                    
+                    if input == "r" {
+                        participant(trueFalse: false)
+                        
+                        //  if positive confirmation given in participant()
+                        if participating == false {
+                            awaitingInputA = false
+                        }
+                        awaitingInputB = false
+                        
+                    } else if input == "u" {
+                        hitPoints = 0
+                        addStatus(stat: "Unconscious")
+                        
+                        //  if positive confirmation given in addStatus()
+                        if statuses.firstIndex(of: "Unconscious") != nil {
+                            awaitingInputA = false
+                        }
+                        awaitingInputB = false
+                    }
+                }
+            }
+        }
+        
+        
+        func loseHP(change: Int) {
+            print("\(charName)'s HP: \(hitPoints) -\(abs(change)) " +
+                "-> [\(Int(hitPoints + change))]?  y/n")
+            
+            if confirm() == true {
+                hitPoints += change
+                if hitPoints > 0 {
+                    gameLog.append("\(charName) has lost \(abs(change)) " +
+                        "HP down to a total of [\(hitPoints)]!")
+                    changeLog.append("\(charName)'s HP: [\(hitPoints)] " +
+                        "(lost \(abs(change))")
+                } else {
+                    zeroOrBelowHP()
+                }
+            }
+        }
+        
+        let cleanString: String = mod.replacingOccurrences(of: " ", with: "")
+
+        if let modifier: Int = Int(cleanString) {
+            
+            if modifier > 0 {
+                gainHP(change: modifier)
+                
+            } else {
+                loseHP(change: modifier)
+            }
+        }
+    }
+
 }
 
 var order: [[String: Characters]] = []
