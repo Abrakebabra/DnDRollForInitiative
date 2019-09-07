@@ -73,30 +73,30 @@ class Characters {
         changeLog.append("Character: \(charName), Initiative: \(initiative)" +
             ", HP: \(hitPoints) / \(maxHitPoints), AC: \(armorClass)")
         gameLog.append("\(charName) has entered the fight with " +
-            "[\(hitPoints) / \(maxHitPoints) HP]!")
+            "[ \(hitPoints) / \(maxHitPoints) HP]!")
         print(changeLog.last as Any)
     }
     
     
     func sameInitiative(dex: Int) {
-        print("Dexterity of [\(dex)] for \(charName)?  y/n")
+        print("Dexterity of [ \(dex) ] for \(charName)?  y/n")
         
         if confirm() == true {
             dexterity = dex
             changeLog.append("\(charName):  Dexterity stat added " +
-                "[\(dexterity as Any)]")
+                "[ \(dexterity as Any) ]")
             print(changeLog.last as Any)
         }
     }
     
     
     func addStatus(stat: String) {
-        print("Add status effect of [\(stat)] to \(charName)?  y/n")
+        print("Add status effect of [ \(stat) ] to \(charName)?  y/n")
         
         if confirm() == true {
             statuses.append(stat)
-            gameLog.append("\(charName) has status effect: [\(stat)]!")
-            changeLog.append("\(charName) has status effect: [\(stat)]")
+            gameLog.append("\(charName) has status effect: [ \(stat) ]!")
+            changeLog.append("\(charName) has status effect: [ \(stat) ]")
             print(changeLog.last as Any)
         }
     }
@@ -104,18 +104,18 @@ class Characters {
     
     func removeStatus(stat: String) {
         guard let index = statuses.firstIndex(of: stat) else {
-            print("Status: [\(stat)] not found")
+            print("Status: [ \(stat) ] not found")
             return
         }
         
-        print("Remove status effect of [\(stat)] from \(charName)?  y/n")
+        print("Remove status effect of [ \(stat) ] from \(charName)?  y/n")
         
         if confirm() == true {
             self.statuses.remove(at: index)
             gameLog.append("\(charName) no longer has status effect: " +
-                "[\(stat)]!")
+                "[ \(stat) ]!")
             changeLog.append("\(charName) no longer has status effect: " +
-                "[\(stat)]")
+                "[ \(stat) ]")
             print(changeLog.last as Any)
         }
         
@@ -152,15 +152,22 @@ class Characters {
         //  handle going over max as choice
         //  perhaps a confirmation choice that will go over max
         
+   
+        
         func gainHP(change: Int) {
+            
+            if hitPoints + change > maxHitPoints {
+                print("-****- Hit points will be above maximum -****-")
+            }
+            
             print("\(charName)'s HP: \(hitPoints) +\(abs(change)) " +
-                "-> [\(Int(hitPoints + change))]?  y/n")
+                "-> [ \(Int(hitPoints + change)) / \(maxHitPoints) ]?  y/n")
             
             if confirm() == true {
                 hitPoints += change
                 gameLog.append("\(charName) has gained \(abs(change)) " +
-                    "HP up to a total of [\(hitPoints)]")
-                changeLog.append("\(charName)'s HP: [\(hitPoints)] " +
+                    "HP up to a total of [ \(hitPoints) ]")
+                changeLog.append("\(charName)'s HP: [ \(hitPoints) ] " +
                     "(gained \(change))")
                 print(changeLog.last as Any)
             }
@@ -204,14 +211,14 @@ class Characters {
         
         func loseHP(change: Int) {
             print("\(charName)'s HP: \(hitPoints) -\(abs(change)) " +
-                "-> [\(Int(hitPoints + change))]?  y/n")
+                "-> [ \(Int(hitPoints + change)) ]?  y/n")
             
             if confirm() == true {
                 hitPoints += change
                 if hitPoints > 0 {
                     gameLog.append("\(charName) has lost \(abs(change)) " +
-                        "HP down to a total of [\(hitPoints)]!")
-                    changeLog.append("\(charName)'s HP: [\(hitPoints)] " +
+                        "HP down to a total of [ \(hitPoints) ]!")
+                    changeLog.append("\(charName)'s HP: [ \(hitPoints) ] " +
                         "(lost \(abs(change))")
                 } else {
                     zeroOrBelowHP()
@@ -237,3 +244,50 @@ class Characters {
 var order: [[String: Characters]] = []
 var currentTurn: [[String: Characters]] = []  //  Copies order when finished all turns
 
+
+func inputToCommands(input: String) {
+    let inputCap: String = input.capitalized
+    let inputArray: [String] = inputCap.components(separatedBy: " ")
+    
+    // function to convert int and handle errors if doesn't work
+    
+    switch inputArray[0] {
+    case "Help":
+        // do something
+    case "New":
+        //
+    case "N":
+        //
+    case "B":
+        //
+    case "Game":
+        //
+    case "Exit":
+        //
+    default:
+        // find character
+    }
+    
+    /*
+     HELP
+     NEW birbman init7 hp15/21 ac13
+     birbman STATUS [stat]
+     birbman REMOVE [stat]
+     birbman LEAVE
+     birbman BACK
+     birbman HP +8
+     birbman HP -7
+     birbman INFO
+     birbman HISTORY
+     N - next turn
+     B - reverse turn
+     GAME
+     EXIT
+     
+     
+     split out first word
+     if a command, then search next words
+     if not, search for character name
+     if not found, return
+     */
+}
