@@ -241,24 +241,150 @@ class Characters {
 
 }
 
-var order: [[String: Characters]] = []
+var charOrder: [[String: Characters]] = []
 var currentTurn: [[String: Characters]] = []  //  Copies order when finished all turns
 
 
 func inputToCommands(input: String) {
+    
+    
+    //  -- tool functions:  strToInt, identifyInputs, extractInputs --
+    
+    func strToInt(userInput: String) -> Int {
+        if let inputInt: Int = Int(userInput) {
+            return inputInt
+        } else {
+            print("Integer not found where expected.  Check format?")
+        }
+    }
+    
+    
+    func identifyInputs(input: String, lookFor: String) -> Bool {
+        let startIndex = input.index(input.startIndex, offsetBy: 0)
+        let endIndex = input.index(input.startIndex, offsetBy: lookFor.count)
+        let identifier: String = String(input[startIndex..<endIndex])
+        
+        if lookFor == identifier {
+            return true
+        } else {
+            print("Need to know what each number is for")
+            return false
+        }
+    }
+    
+    
+    func extractInputs(input: String, identifier: String) -> String {
+        let startIndex = input.index(input.startIndex, offsetBy: identifier.count)
+        let endIndex = input.index(input.endIndex, offsetBy: 0)
+        let extracted: String = String(input[startIndex..<endIndex])
+        
+        return extracted
+    }
+    
+    //  ---- end of tool functions --
+    
+    
     let inputCap: String = input.capitalized
-    let inputArray: [String] = inputCap.components(separatedBy: " ")
+    let commands: [String] = inputCap.components(separatedBy: " ")
     
-    // function to convert int and handle errors if doesn't work
     
-    switch inputArray[0] {
+    
+    
+    func new(inputs: [String]) {
+        let charName: String = commands[1]
+        let initiative: Int
+        let hp: Int
+        let maxHP: Int
+        let ac: Int
+        
+        
+        if identifyInputs(input: commands[2], lookFor: "I") == true {
+            let iData: String = extractInputs(input: commands[2], identifier: "I")
+            if let iDataInt: Int = Int(iData) {
+                initiative = iDataInt
+            } else {
+                print("Check [i]nitiative number.  " +
+                    "Should be like: new birbman i7 hp15/21 ac13")
+                return
+            }
+        } else {
+            print("Can't find [i]nitiative.  " +
+                "Should be like: new birbman i7 hp15/21 ac13")
+            return
+        }
+        
+        if identifyInputs(input: commands[3], lookFor: "Hp") == true {
+            let hpData: String = extractInputs(input: commands[3], identifier: "Hp")
+            let hpDataSeparated: [String] = hpData.components(separatedBy: "/")
+            
+            if let hpDataInt: Int = Int(hpDataSeparated[0]) {
+                hp = hpDataInt
+            } else {
+                print("Check [hp] number.  " +
+                    "Should be like: new birbman i7 hp15/21 ac13")
+                return
+            }
+            
+            if let maxHPDataInt: Int = Int(hpDataSeparated[1]) {
+                maxHP = maxHPDataInt
+            } else {
+                print("Check [hp] number.  " +
+                    "Should be like: new birbman i7 hp15/21 ac13")
+                return
+            }
+        } else {
+            print("Can't find [hp].  " +
+                "Should be like: new birbman i7 hp15/21 ac13")
+            return
+        }
+        
+        if identifyInputs(input: commands[4], lookFor: "Ac") == true {
+            let acData: String = extractInputs(input: commands[4], identifier: "Ac")
+            if let acDataInt: Int = Int(acData) {
+                ac = acDataInt
+            } else {
+                print("Check [ac] number.  " +
+                    "Should be like: new birbman i7 hp15/21 ac13")
+                return
+            }
+        } else {
+            print("Can't find [ac].  " +
+                "Should be like: new birbman i7 hp15/21 ac13")
+            return
+        }
+        
+        
+        if charOrder.count > 0 {
+            for i in 0..<charOrder.count {
+                //  check initiative, is there already dex?
+            }
+        } else {
+            charOrder.append([charName: Characters(name: charName, ini: initiative, HP: hp, maxHP: maxHP, AC: ac)])
+        }
+
+    }
+    
+    
+    switch commands[0] {
     case "Help":
-        // do something
+        print(
+            """
+            new birbman i7 hp15/21 ac13 | new [Name] i[Initiative], hp[HP]/[maxHP], ac[AC]
+            birbman hp +8               | adds 8 HP
+            birbman hp -7               | removes 7 HP
+            birbman status [status]     | adds [status]
+            birbman remove [status]     | removes [status]
+            birbman leave               | Birbman leaves battle order
+            birbman back                | Birbman returns to battle order
+            birbman info                | shows all Birbman's info
+            birbman log                 | shows history of Birbman's actions
+            next                        | next turn
+            game                        | print game summary
+            exit                        | exit
+            """)
     case "New":
-        //
+        new(inputs: commands)
     case "N":
-        //
-    case "B":
         //
     case "Game":
         //
@@ -269,22 +395,6 @@ func inputToCommands(input: String) {
     }
     
     /*
-     HELP
-     NEW birbman init7 hp15/21 ac13
-     birbman STATUS [stat]
-     birbman REMOVE [stat]
-     birbman LEAVE
-     birbman BACK
-     birbman HP +8
-     birbman HP -7
-     birbman INFO
-     birbman HISTORY
-     N - next turn
-     B - reverse turn
-     GAME
-     EXIT
-     
-     
      split out first word
      if a command, then search next words
      if not, search for character name
