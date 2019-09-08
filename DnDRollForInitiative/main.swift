@@ -241,8 +241,74 @@ class Characters {
 
 }
 
-var charOrder: [[String: Characters]] = []
-var currentTurn: [[String: Characters]] = []  //  Copies order when finished all turns
+var charsOrdered: [Characters] = []
+var currentTurn: [Characters] = []  //  Copies order when finished all turns
+
+func hasDexCheck(char: Characters) -> Bool {
+    if char.dexterity != nil {
+        return true
+    } else {
+        return false
+    }
+}
+
+
+func inputInt() -> Int {
+    var awaitingInput: Bool = true
+    
+    while awaitingInput == true {
+        let input: String? = readLine()
+        if let inputStr: String = input, let inputInt: Int = Int(inputStr) {
+            awaitingInput = false
+            return inputInt
+        } else {
+            print("Needs a number")
+        }
+    }
+}
+
+
+func inputDex(char: String) -> Int {
+    var awaitingDex = true
+    
+    while awaitingDex == true {
+        print("What is \(char)'s dexterity:")
+        let dexInput = inputInt()
+        print("\(char) dexterity: [\(dexInput)] ok?")
+        if confirm() == true {
+            awaitingDex = false
+            return dexInput
+        }
+    }
+}
+
+//  dex as float?
+
+
+func sameInitiativeCheck(testInit: Int) -> [[String: Any]] {
+    var sameInitChars: [[String: Any]] = []
+    
+    for i in 0..<charsOrdered.count {
+        
+        if charsOrdered[i].initiative == testInit {
+            
+            if hasDexCheck(char: charsOrdered[i]) == false {
+                let dexInput: Int = inputDex(char: charsOrdered[i].charName)
+                charsOrdered[i].dexterity = dexInput
+            }
+            
+            if let dex: Int = charsOrdered[i].dexterity {
+                sameInitChars.append([
+                    "charName": charsOrdered[i].charName,
+                    "initiative": charsOrdered[i].initiative,
+                    "dexterity": dex,
+                    "index": i
+                    ])
+            }
+        }
+    }
+    return sameInitChars
+}
 
 
 func inputToCommands(input: String) {
@@ -354,12 +420,16 @@ func inputToCommands(input: String) {
         }
         
         
-        if charOrder.count > 0 {
-            for i in 0..<charOrder.count {
-                //  check initiative, is there already dex?
+        if charsOrdered.count > 0 {
+            let sameInitChars = sameInitiativeCheck(testInit: initiative)
+            if sameInitChars.count > 0 {
+                let dexInput = inputDex(char: charName)
+                // print order of all characters with same
+            } else {
+                //  insert character at point
             }
         } else {
-            charOrder.append([charName: Characters(name: charName, ini: initiative, HP: hp, maxHP: maxHP, AC: ac)])
+            charsOrdered.append(Characters(name: charName, ini: initiative, HP: hp, maxHP: maxHP, AC: ac))
         }
 
     }
@@ -384,12 +454,20 @@ func inputToCommands(input: String) {
             """)
     case "New":
         new(inputs: commands)
-    case "N":
+    case "Next":
         //
     case "Game":
         //
     case "Exit":
-        //
+        print("Are you sure you want to exit?")
+        let confirm1 = confirm()
+            if confirm1 == true {
+                print("Double sure?")
+                let confirm2 = confirm()
+                if confirm2 == true {
+                    //  stop run loop
+                }
+            }
     default:
         // find character
     }
