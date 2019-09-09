@@ -76,25 +76,47 @@ func new(command: [String]) {
     
     
     if charsOrdered.count > 0 {
-        let sameInitChars = sameInitiativeCheck(testInit: initiative)
+        let sameInitChars: [Characters] = sameInitiativeCheck(testInit: initiative)
+        
+        labelBattleTurnOrders()
+        //  labelBattleOrders() Gives every existing character an
+        //  array element ID as array position reference to insert new character
+        
         
         if sameInitChars.count > 0 {
+            //  sameInitChars.count > 0 == true:
+            //  Check dex and find all characters with same dex
+            
             let dexInput = inputDex(char: charName)
-            let sameDexChars = sameDexCheck(initCharList: sameInitChars, testDex: dexInput)
+            let sameDexChars: [Characters] = sameDexCheck(initCharList: sameInitChars,
+                                                          testDex: dexInput)
             
             if sameDexChars.count > 0 {
-                //  insert in position
-                sameDexInsert(sameDexCharList: sameDexChars, newName: charName, newInit: initiative, newHP: hp, newMaxHP: maximumHP, newAC: ac, newDex: dexInput)
+                //  sameDexChars.count > 0 == true:
+                //  insert in position of choice among same Dex characters
+                sameDexInsert(sameDexCharList: sameDexChars, newName: charName,
+                              newInit: initiative, newHP: hp, newMaxHP: maximumHP,
+                              newAC: ac, newDex: dexInput)
+                
             } else {
-                // insert character at point based on Initiative and Dex
+                //  sameDexChars.count > 0 == false:
+                //  insert character at point based on Initiative and Dex
+                sameInitInsert(sameInitCharList: sameInitChars, newName: charName,
+                               newInit: initiative, newHP: hp, newMaxHP: maximumHP,
+                               newAC: ac, newDex: dexInput)
             }
             
         } else {
+            //  sameInitChars.count > 0 == false:
             //  insert character at point based on Initiative only
+            rollForInitiative(newName: charName, newInit: initiative,
+                              newHP: hp, newMaxHP: maximumHP, newAC: ac)
         }
     } else {
+        //  charsOrdered.count > 0 == false:
         //  Insert first character
-        charsOrdered.append(Characters(name: charName, ini: initiative, HP: hp, maxHP: maximumHP, AC: ac))
+        charsOrdered.append(Characters(name: charName,ini: initiative,
+                                       HP: hp, maxHP: maximumHP, AC: ac))
     }
     
 }

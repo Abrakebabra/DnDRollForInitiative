@@ -9,15 +9,10 @@
 import Foundation
 
 
-/*
- Does the character have a dex number to compare with?
- This should only be called the first instance each initiative roll has a duplicate
- */
-func hasDexCheck(char: Characters) -> Bool {
-    if char.dexterity != nil {
-        return true
-    } else {
-        return false
+//  Iterate through all characters and label the order they will appear
+func labelBattleTurnOrders() {
+    for i in 0..<charsOrdered.count {
+        charsOrdered[i].order = Int(i)
     }
 }
 
@@ -38,20 +33,34 @@ func inputDex(char: String) -> Int {
 }
 
 
+/*
+ Does the character have a dex number to compare with?
+ This should only be called the first instance each initiative roll has a duplicate
+ */
+func hasDexCheck(char: Characters) -> Bool {
+    if char.dexterity != nil {
+        return true
+    } else {
+        return false
+    }
+}
+
+
 //  Output an array of all characters with the same initiative roll
 func sameInitiativeCheck(testInit: Int) -> [Characters] {
     var sameInitChars: [Characters] = []
     
-    for otherChars in charsOrdered {
+    for otherChar in charsOrdered {
         
-        if otherChars.initiative == testInit {
+        if otherChar.initiative == testInit {
             
-            if hasDexCheck(char: otherChars) == false {
-                let dexInput: Int = inputDex(char: otherChars.charName)
-                otherChars.dexterity = dexInput
+            if hasDexCheck(char: otherChar) == false {
+                let dexInput: Int = inputDex(char: otherChar.charName)
+                otherChar.dexterity = dexInput
             }
             
-            sameInitChars.append(otherChars)
+            //  Returns a list of existing ordered chars with dex
+            sameInitChars.append(otherChar)
         }
     }
     return sameInitChars
@@ -75,7 +84,6 @@ func sameDexCheck(initCharList: [Characters], testDex: Int) -> [Characters] {
 func sameDexInsert(sameDexCharList: [Characters], newName: String, newInit: Int, newHP:
     Int, newMaxHP: Int, newAC: Int, newDex: Int) {
     
-    labelBattleOrders()
     var inputAccepted: Bool = false
     let firstIndex: Int = sameDexCharList[0].order!
     let lastIndex: Int = sameDexCharList.last!.order!
@@ -107,4 +115,43 @@ func sameDexInsert(sameDexCharList: [Characters], newName: String, newInit: Int,
             inputAccepted = true
         }
     }
+}
+
+
+func sameInitInsert(sameInitCharList: [Characters], newName: String, newInit: Int, newHP:
+    Int, newMaxHP: Int, newAC: Int, newDex: Int) {
+    
+    var turnPos: Int = sameInitCharList[0].order!
+    
+    for i in 0..<sameInitCharList.count {
+        
+        if sameInitCharList[i].dexterity! < newDex {
+            turnPos = sameInitCharList[i].order!
+            
+            charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos)
+            charsOrdered[turnPos].dexterity = newDex
+            break
+        }
+    }
+    
+    charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos + 1)
+    charsOrdered[turnPos].dexterity = newDex
+    
+}
+
+
+func rollForInitiative(newName: String, newInit: Int, newHP:
+    Int, newMaxHP: Int, newAC: Int) {
+    
+    var turnPos: Int = charsOrdered[0].order!
+    
+    for i in 0..<charsOrdered.count {
+        
+        if charsOrdered[i].initiative < newInit {
+            charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos)
+            break
+        }
+    }
+    
+    charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos + 1)
 }

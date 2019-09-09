@@ -68,9 +68,3 @@ func extractInputs(input: String, identifier: String) -> String {
 }
 
 
-//  Iterate through all characters and label the order they will appear
-func labelBattleOrders() {
-    for i in 0..<charsOrdered.count {
-        charsOrdered[i].order = Int(i)
-    }
-}
