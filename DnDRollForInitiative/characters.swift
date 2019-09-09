@@ -104,8 +104,8 @@ class Characters {
         }
     }
     
-    
-    func modHitpoints(mod: String) {
+    // Might no longer be a String.  Likely Integer input.
+    func modHitpoints(mod: Int) {
         
         //  handle going over max as choice
         //  perhaps a confirmation choice that will go over max
@@ -183,17 +183,12 @@ class Characters {
                 }
             }
         }
-        
-        let cleanString: String = mod.replacingOccurrences(of: " ", with: "")
-        
-        if let modifier: Int = Int(cleanString) {
+
+        if mod > 0 {
+            gainHP(change: mod)
             
-            if modifier > 0 {
-                gainHP(change: modifier)
-                
-            } else {
-                loseHP(change: modifier)
-            }
+        } else {
+            loseHP(change: mod)
         }
     }
     

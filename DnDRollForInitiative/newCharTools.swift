@@ -70,3 +70,41 @@ func sameDexCheck(initCharList: [Characters], testDex: Int) -> [Characters] {
     }
     return sameDexChars
 }
+
+
+func sameDexInsert(sameDexCharList: [Characters], newName: String, newInit: Int, newHP:
+    Int, newMaxHP: Int, newAC: Int, newDex: Int) {
+    
+    labelBattleOrders()
+    var inputAccepted: Bool = false
+    let firstIndex: Int = sameDexCharList[0].order!
+    let lastIndex: Int = sameDexCharList.last!.order!
+    /*
+     Force unwrap:  This function is only called if sameDexCharList.count > 0
+     and after labelBattleOrders() has been called.
+     */
+    
+    while inputAccepted == false {
+        print("Where do you want to insert \(newName)?")
+        print("First\n---")
+        
+        print("[\(firstIndex)]")
+        for otherChars in sameDexCharList {
+            
+            if let otherCharOrder: Int = otherChars.order {
+                print("\(otherChars.charName)")
+                print("[\(otherCharOrder + 1)]")
+            }
+        }
+        
+        print("---\nLast")
+        print("Enter [num] position:")
+        
+        let orderInput: Int = inputInt()
+        if orderInput >= firstIndex && orderInput <= lastIndex {
+            charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: orderInput)
+            charsOrdered[orderInput].dexterity = newDex
+            inputAccepted = true
+        }
+    }
+}

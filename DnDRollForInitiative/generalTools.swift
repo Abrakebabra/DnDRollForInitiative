@@ -43,16 +43,6 @@ func inputInt() -> Int {
 }
 
 
-//  Convert an optional string to an integer
-func strToInt(userInput: String) -> Int {
-    if let inputInt: Int = Int(userInput) {
-        return inputInt
-    } else {
-        print("Integer not found where expected.  Check format?")
-    }
-}
-
-
 //  Identify inputs
 func identifyInputs(input: String, lookFor: String) -> Bool {
     let startIndex = input.index(input.startIndex, offsetBy: 0)
