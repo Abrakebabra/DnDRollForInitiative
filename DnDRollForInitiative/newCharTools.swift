@@ -148,6 +148,8 @@ func rollForInitiative(newName: String, newInit: Int, newHP:
     for i in 0..<charsOrdered.count {
         
         if charsOrdered[i].initiative < newInit {
+            turnPos = charsOrdered[i].order!
+            
             charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos)
             break
         }

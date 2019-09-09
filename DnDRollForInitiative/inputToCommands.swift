@@ -34,21 +34,14 @@ func inputToCommands(input: String) {
     case "New":
         new(command: commands)
     case "Next":
-    //
+        next()
     case "Game":
-    //
+        game()
     case "Exit":
-        print("Are you sure you want to exit?")
-        let confirm1 = confirm()
-        if confirm1 == true {
-            print("Double sure?")
-            let confirm2 = confirm()
-            if confirm2 == true {
-                //  stop run loop
-            }
-        }
+        exit()
     default:
         // find character
+        characterModify(command: commands)
     }
     
     /*

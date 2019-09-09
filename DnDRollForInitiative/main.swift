@@ -35,6 +35,6 @@ import Foundation
 var gameLog: [String] = []
 
 var charsOrdered: [Characters] = []
-var currentTurn: [Characters] = []  //  Copies order when finished all turns
-
+var currentOrder: [Characters] = []  //  Copies order when finished all turns
+var turn: Int = 0
 

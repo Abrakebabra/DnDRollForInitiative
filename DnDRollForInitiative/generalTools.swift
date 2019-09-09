@@ -68,3 +68,19 @@ func extractInputs(input: String, identifier: String) -> String {
 }
 
 
+func displayCurrentTurn() {
+    var turnMarker: String = ""
+    var removedMarker: String = ""
+    
+    for i in 0..<currentOrder.count {
+        
+        if i == turn {
+            turnMarker = ">>--->  "
+        }
+        
+        if currentOrder[i].participating == false {
+            removedMarker = "  X_X  "
+        }
+        print(turnMarker + removedMarker + currentOrder[i].charName)
+    }
+}

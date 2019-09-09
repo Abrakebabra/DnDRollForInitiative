@@ -120,3 +120,148 @@ func new(command: [String]) {
     }
     
 }
+
+
+func next() {
+    var availableCharFound: Bool = false
+    
+    func availableCharsRemaining() -> Bool {
+        var availableChars: Int = 0
+        
+        for i in 0..<charsOrdered.count {
+            if charsOrdered[i].participating == true {
+                availableChars += 1
+            }
+        }
+        
+        if availableChars > 1 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func nextTurn() {
+        turn += 1
+        
+        if turn > currentOrder.count - 1 {
+            currentOrder = charsOrdered
+            turn = 0
+        }
+    }
+    
+    func availabilityCheck() -> Bool {
+        if charsOrdered[turn].participating == true {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    //  If there are less than 2 available characters left, next turn functions
+    //  will not be called
+    if availableCharsRemaining() == true {
+        
+        while availableCharFound == false {
+            nextTurn()
+            availableCharFound = availabilityCheck()
+        }
+        
+        displayCurrentTurn()
+        
+    } else {
+        print("No other available characters to change turn to")
+        return
+    }
+    
+}
+
+
+func game() {
+    print("============ GAME SUMMARY ============")
+    for event in gameLog {
+        print(event)
+    }
+    print("======================================")
+}
+
+
+func exit() {
+    print("Are you sure you want to exit?")
+    let confirm1 = confirm()
+    if confirm1 == true {
+        print("Double sure?")
+        let confirm2 = confirm()
+        if confirm2 == true {
+            //  stop run loop
+        }
+    }
+}
+
+
+func characterModify(command: [String]) -> Void {
+    /*
+     Commands:
+     birbman hp +8               | adds 8 HP
+     birbman hp -7               | removes 7 HP
+     birbman status [status]     | adds [status]
+     birbman remove [status]     | removes [status]
+     birbman leave               | Birbman leaves battle order
+     birbman back                | Birbman returns to battle order
+     birbman info                | shows all Birbman's info
+     birbman log                 | shows history of Birbman's actions
+    */
+    let characterName: String = command[0]
+    let characterIndex: Int
+    let action: String = command[1]
+    let actionInput: String
+    var characterFound: Bool = false
+    
+    //  Find where the character is in the array
+    for i in 0..<charsOrdered.count {
+        if charsOrdered[i].charName == characterName {
+            characterIndex = i
+            characterFound = true
+            break
+        }
+    }
+    
+    //  If character not found, notify and exit
+    if characterFound == false {
+        print("Character not found!")
+        return
+    }
+    
+    //  If there is a 3rd command, assign it as the action input
+    //  If there are more, cancel the function and notify format is incorrect
+    if command.count > 2 {
+        actionInput = command[2]
+    } else if command.count > 3 {
+        print("Check format.  Should be like:\n" +
+            "    birbman hp -7 or birbman status bananas")
+        return
+    }
+    
+    switch command[1] {
+    case "Hp":
+        //  do something
+    case "Status":
+        //  do something
+    case "Remove":
+        //  do something
+    case "Leave":
+        //  do something
+    case "Back":
+        //  do something
+    case "Info":
+        //  do something
+    case "Log":
+        charLog(charIndex: characterIndex)
+    default:
+        print("Check format.  Should be like:\n" +
+            "    birbman hp -7    or    birbman status bananas")
+        return
+    }
+    
+    
+}
