@@ -69,18 +69,54 @@ func extractInputs(input: String, identifier: String) -> String {
 
 
 func displayCurrentTurn() {
-    var turnMarker: String = ""
-    var removedMarker: String = ""
+    let turnMarker: String = ">>--->  "
+    let removedMarker: String = "x   "
     
     for i in 0..<currentOrder.count {
+        let charObj = currentOrder[i]
         
+        //  Is current turn
         if i == turn {
-            turnMarker = ">>--->  "
+            
+            if charObj.statuses.count > 0 {
+                print("\(turnMarker) + \(charObj.charName)" +
+                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
+                    "  AC: [\(charObj.armorClass)]" +
+                    "  Statuses: \(charObj.statuses)")
+            } else {
+                print("\(turnMarker) + \(charObj.charName)" +
+                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
+                    "  AC: [\(charObj.armorClass)]")
+            }
         }
         
+        //  Is not in battle
         if currentOrder[i].participating == false {
-            removedMarker = "  X_X  "
+            
+            if charObj.statuses.count > 0 {
+                print("\(removedMarker) + \(charObj.charName)" +
+                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
+                    "  AC: [\(charObj.armorClass)]" +
+                    "  Statuses: \(charObj.statuses)")
+            } else {
+                print("\(removedMarker) + \(charObj.charName)" +
+                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
+                    "  AC: [\(charObj.armorClass)]")
+            }
+            
+        } else {
+            
+            //  In battle but not in turn
+            if charObj.statuses.count > 0 {
+                print("\(charObj.charName)" +
+                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
+                    "  AC: [\(charObj.armorClass)]" +
+                    "  Statuses: \(charObj.statuses)")
+            } else {
+                print("\(charObj.charName)" +
+                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
+                    "  AC: [\(charObj.armorClass)]")
+            }
         }
-        print(turnMarker + removedMarker + currentOrder[i].charName)
     }
 }

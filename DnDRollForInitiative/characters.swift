@@ -104,28 +104,23 @@ class Characters {
         }
     }
     
-    // Might no longer be a String.  Likely Integer input.
-    func modHitpoints(mod: Int) {
-        
-        //  handle going over max as choice
-        //  perhaps a confirmation choice that will go over max
-        
-        
+    
+    func modHitPoints(mod: Int) {
         
         func gainHP(change: Int) {
             
             if hitPoints + change > maxHitPoints {
-                print("-****- Hit points will be above maximum -****-")
+                print("-<<<****- Hit points will be above maximum -****>>>-")
             }
             
             print("\(charName)'s HP: \(hitPoints) +\(abs(change)) " +
-                "-> [ \(Int(hitPoints + change)) / \(maxHitPoints) ]?  y/n")
+                "-> [\(Int(hitPoints + change)) / \(maxHitPoints)]?  y/n")
             
             if confirm() == true {
                 hitPoints += change
                 gameLog.append("\(charName) has gained \(abs(change)) " +
-                    "HP up to a total of [ \(hitPoints) ]")
-                changeLog.append("\(charName)'s HP: [ \(hitPoints) ] " +
+                    "HP up to a total of [\(hitPoints)]")
+                changeLog.append("\(charName)'s HP: [\(hitPoints)] " +
                     "(gained \(change))")
                 print(changeLog.last as Any)
             }
@@ -153,14 +148,17 @@ class Characters {
                         awaitingInputB = false
                         
                     } else if input == "u" {
-                        hitPoints = 0
-                        addStatus(stat: "Unconscious")
+                        print("\(charName) will be unconscious?  y/n")
+                        let confirmation = confirm()
                         
-                        //  if positive confirmation given in addStatus()
-                        if statuses.firstIndex(of: "Unconscious") != nil {
+                        if confirmation == true {
+                            hitPoints = 0
+                            statuses.insert("Unconscious", at: 0)
+                            gameLog.append("\(charName) is unconscious!!")
+                            changeLog.append("\(charName) is unconscious!!")
                             awaitingInputA = false
+                            awaitingInputB = false
                         }
-                        awaitingInputB = false
                     }
                 }
             }

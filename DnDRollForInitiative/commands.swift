@@ -18,7 +18,12 @@ func new(command: [String]) {
     let maximumHP: Int
     let ac: Int
     
+    if sameNameCheck(check: charName) == true {
+        print("Same name already entered!")
+        return
+    }
     
+    //  Perhaps prompts might be better than writing out a string of text
     if identifyInputs(input: command[2], lookFor: "I") == true {
         let iData: String = extractInputs(input: command[2], identifier: "I")
         if let iDataInt: Int = Int(iData) {
@@ -122,6 +127,20 @@ func new(command: [String]) {
 }
 
 
+
+/*
+ Perhaps a slow prompted add, and a quick single line add
+
+ For example:
+ [Name] [Initiative] [HP/MAX] [AC]
+ 
+ please enter in format of:  name 15 18/18 12
+ 
+ */
+
+
+
+
 func next() {
     var availableCharFound: Bool = false
     
@@ -206,8 +225,8 @@ func characterModify(command: [String]) -> Void {
      birbman hp -7               | removes 7 HP
      birbman status [status]     | adds [status]
      birbman remove [status]     | removes [status]
-     birbman leave               | Birbman leaves battle order
-     birbman back                | Birbman returns to battle order
+     birbman out                 | Birbman leaves battle order
+     birbman in                  | Birbman returns to battle order
      birbman info                | shows all Birbman's info
      birbman log                 | shows history of Birbman's actions
     */
@@ -249,12 +268,12 @@ func characterModify(command: [String]) -> Void {
         //  do something
     case "Remove":
         //  do something
-    case "Leave":
+    case "Out":
         //  do something
-    case "Back":
+    case "In":
         //  do something
     case "Info":
-        //  do something
+        charInfo(charIndex: characterIndex)
     case "Log":
         charLog(charIndex: characterIndex)
     default:

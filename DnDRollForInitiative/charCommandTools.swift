@@ -9,27 +9,27 @@
 import Foundation
 
 
-func charHp() {
+func charHp(charIndex: Int, modifier: String) {
     
 }
 
 
-func charStatus() {
+func charStatus(charIndex: Int, newStatus: String) {
+    // convert to Int
+}
+
+
+func charRemove(charIndex: Int, remStatus: String) {
     
 }
 
 
-func charRemove() {
+func charOut() {
     
 }
 
 
-func charLeave() {
-    
-}
-
-
-func charBack() {
+func charIn() {
     
 }
 
@@ -37,23 +37,37 @@ func charBack() {
 func charInfo(charIndex: Int) {
     let charObj: Characters = charsOrdered[charIndex]
     let charName: String = charObj.charName
+    let participating: Bool = charObj.participating
     let initiative: Int = charObj.initiative
-    var hp: Int = charObj.hitPoints
-    var maxHP: Int = charObj.maxHitPoints
-    var statuses: [String] = charObj.statuses
-    var participating: Bool = charObj.participating
-    var armorClass: Int = charObj.armorClass
+    let hp: Int = charObj.hitPoints
+    let maxHP: Int = charObj.maxHitPoints
+    let armorClass: Int = charObj.armorClass
+    let statuses: [String] = charObj.statuses
     
-    var dexterity: Int?  //  can this change halfway through a battle?
-    var order: Int?  // battle order
+    print("------------ \(charName.uppercased())'s Information ------------")
+    if participating == true {
+        print("In Battle")
+    } else {
+        print("Out of Battle")
+    }
+    print("Initiative:       [\(initiative)]")
+    if let dexterity: Int = charObj.dexterity {
+        print("Dexterity:        [\(dexterity)]")
+    }
+    print("Hit Points:       [\(hp) / \(maxHP)]")
+    print("Armor Class:      [\(armorClass)]")
+    if statuses.count > 0 {
+        print("Status Effects:       \(statuses)")
+    }
+    print("------------ End of \(charName.uppercased())'s Information ------------")
 }
 
 
 func charLog(charIndex: Int) {
     let charName: String = charsOrdered[charIndex].charName
-    print("------------ \(charName)'s Change Log ------------")
+    print("------------ \(charName.uppercased())'s Change Log ------------")
     for change in charsOrdered[charIndex].changeLog {
         print(change)
     }
-    print("------------ End of \(charName)'s Changes ------------")
+    print("------------ End of \(charName.uppercased())'s Changes ------------")
 }

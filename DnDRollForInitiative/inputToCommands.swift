@@ -13,7 +13,8 @@ func inputToCommands(input: String) {
     let inputCap: String = input.capitalized
     let commands: [String] = inputCap.components(separatedBy: " ")
     
-
+    
+    //  add option for multiple enemies of the same kind with varying hp
     switch commands[0] {
     case "Help":
         print(
@@ -23,8 +24,8 @@ func inputToCommands(input: String) {
             birbman hp -7               | removes 7 HP
             birbman status [status]     | adds [status]
             birbman remove [status]     | removes [status]
-            birbman leave               | Birbman leaves battle order
-            birbman back                | Birbman returns to battle order
+            birbman out                 | Birbman leaves battle order
+            birbman in                  | Birbman returns to battle order
             birbman info                | shows all Birbman's info
             birbman log                 | shows history of Birbman's actions
             next                        | next turn

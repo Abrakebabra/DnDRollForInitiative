@@ -9,6 +9,18 @@
 import Foundation
 
 
+func sameNameCheck(check: String) -> Bool {
+    
+    for charObj in charsOrdered {
+        
+        if charObj.charName == check {
+            return true
+        }
+    }
+    return false
+}
+
+
 //  Iterate through all characters and label the order they will appear
 func labelBattleTurnOrders() {
     for i in 0..<charsOrdered.count {
