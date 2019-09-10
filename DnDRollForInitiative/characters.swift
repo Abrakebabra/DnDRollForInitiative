@@ -32,7 +32,6 @@ class Characters {
             ", HP: \(hitPoints) / \(maxHitPoints), AC: \(armorClass)")
         gameLog.append("\(charName) has entered the fight with " +
             "[ \(hitPoints) / \(maxHitPoints) HP]!")
-        print(changeLog.last as Any)
     }
     
     
@@ -42,8 +41,8 @@ class Characters {
         if confirm() == true {
             dexterity = dex
             changeLog.append("\(charName):  Dexterity stat added " +
-                "[ \(dexterity as Any) ]")
-            print(changeLog.last as Any)
+                "[ \(dexterity!) ]")
+            printLastChange(characterName: charName)
         }
     }
     
@@ -55,7 +54,7 @@ class Characters {
             statuses.append(stat)
             gameLog.append("\(charName) has status effect: [ \(stat) ]!")
             changeLog.append("\(charName) has status effect: [ \(stat) ]")
-            print(changeLog.last as Any)
+            printLastChange(characterName: charName)
         }
     }
     
@@ -74,7 +73,7 @@ class Characters {
                 "[ \(stat) ]!")
             changeLog.append("\(charName) no longer has status effect: " +
                 "[ \(stat) ]")
-            print(changeLog.last as Any)
+            printLastChange(characterName: charName)
         }
         
     }
@@ -89,7 +88,7 @@ class Characters {
                 participating = state
                 gameLog.append("\(charName) is out of battle!")
                 changeLog.append("\(charName) is removed from battle")
-                print(changeLog.last as Any)
+                printLastChange(characterName: charName)
             }
             
         } else {
@@ -99,7 +98,7 @@ class Characters {
                 participating = state
                 gameLog.append("\(charName) is back in the fight!")
                 changeLog.append("\(charName) is added back to battle")
-                print(changeLog.last as Any)
+                printLastChange(characterName: charName)
             }
         }
     }
@@ -122,7 +121,7 @@ class Characters {
                     "HP up to a total of [\(hitPoints)]")
                 changeLog.append("\(charName)'s HP: [\(hitPoints)] " +
                     "(gained \(change))")
-                print(changeLog.last as Any)
+                printLastChange(characterName: charName)
             }
         }
         

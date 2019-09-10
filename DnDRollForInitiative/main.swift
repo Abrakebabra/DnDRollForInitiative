@@ -24,13 +24,39 @@ import Foundation
 //  all = show all characters, order, stats,
 //  add = new characters (and check)
 
+
+
+
 /*
- Turn order:
- -----------
+ Bugs:
+  - Adding first character, stats don't show
+ 
+
+ 
+ 
+ 
+ To re-design/modify:
+  - output printlines not so great to read
+  - new character entry is confusing to use.  Prompts might be better
+  - add option for quick entry without prompts
+  - after modifying, should display everything again with updated stats
+  - making changes such as HP, needs a change confirmed printline
+  - are all the confirmations necessary?
+  - option to delete a character entirely if mistakes are made?
+  - or option to modify its stats directly?
+  - If y/n for confirmation not entered, needs to re-show the confirmation prompt
+    otherwise I don't know whether my input has been received or it's still waiting
+  -
+ 
+ 
+ 
+ 
+ 
+ To clean:
+  -
  
  */
 
-//  Consider adding max HP?  Might take away from the game if entering too much info
 
 var gameLog: [String] = []
 
@@ -40,6 +66,7 @@ var turn: Int = 0
 
 var runProgram: Bool = true
 
+help()
 while runProgram == true {
     let rawInput: String? = readLine()
     if let stringInput: String = rawInput {

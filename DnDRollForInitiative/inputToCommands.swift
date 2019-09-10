@@ -17,21 +17,7 @@ func inputToCommands(input: String) {
     //  add option for multiple enemies of the same kind with varying hp
     switch commands[0] {
     case "Help":
-        print(
-            """
-            new birbman i7 hp15/21 ac13 | new [Name] i[Initiative], hp[HP]/[maxHP], ac[AC]
-            birbman hp +8               | adds 8 HP
-            birbman hp -7               | removes 7 HP
-            birbman status [status]     | adds [status]
-            birbman remove [status]     | removes [status]
-            birbman out                 | Birbman leaves battle order
-            birbman in                  | Birbman returns to battle order
-            birbman info                | shows all Birbman's info
-            birbman log                 | shows history of Birbman's actions
-            next                        | next turn
-            game                        | print game summary
-            exit                        | exit
-            """)
+        help()
     case "New":
         new(command: commands)
     case "Next":

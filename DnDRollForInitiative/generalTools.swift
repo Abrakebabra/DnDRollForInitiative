@@ -43,6 +43,32 @@ func inputInt() -> Int {
 }
 
 
+//  Find where the character is in the array
+func findCharInArray(characterName: String) -> Int {
+    for i in 0..<charsOrdered.count {
+        if charsOrdered[i].charName == characterName {
+            return i
+        }
+    }
+    print("charsOrdered.count: \(charsOrdered.count)")
+    print("can't find")
+    return -1
+}
+
+
+func printLastChange(characterName: String) {
+    let charIndex: Int = findCharInArray(characterName: characterName)
+    
+    if charIndex == -1 {
+        return
+    }
+    
+    if let lastEntry: String = charsOrdered[charIndex].changeLog.last {
+        print(lastEntry)
+    }
+}
+
+
 //  Identify inputs
 func identifyInputs(input: String, lookFor: String) -> Bool {
     let startIndex = input.index(input.startIndex, offsetBy: 0)
@@ -80,13 +106,12 @@ func displayCurrentTurn() {
         if i == turn {
             
             if charObj.statuses.count > 0 {
-                print("\(turnMarker)" +
-                    "\(charObj.charName)" +
+                print("\(turnMarker)" + "\(charObj.charName)" +
                     "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
                     "  AC: [\(charObj.armorClass)]" +
                     "  Statuses: \(charObj.statuses)")
             } else {
-                print("\(turnMarker) + \(charObj.charName)" +
+                print("\(turnMarker)" + "\(charObj.charName)" +
                     "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
                     "  AC: [\(charObj.armorClass)]")
             }

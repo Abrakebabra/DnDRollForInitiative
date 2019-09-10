@@ -124,6 +124,7 @@ func sameDexInsert(sameDexCharList: [Characters], newName: String, newInit: Int,
         if orderInput >= firstIndex && orderInput <= lastIndex + 1{
             charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: orderInput)
             charsOrdered[orderInput].dexterity = newDex
+            printLastChange(characterName: newName)
             inputAccepted = true
         }
     }
@@ -142,12 +143,14 @@ func sameInitInsert(sameInitCharList: [Characters], newName: String, newInit: In
             
             charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos)
             charsOrdered[turnPos].dexterity = newDex
-            break
+            printLastChange(characterName: newName)
+            return
         }
     }
     
     charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos + 1)
     charsOrdered[turnPos].dexterity = newDex
+    printLastChange(characterName: newName)
     
 }
 
@@ -163,9 +166,11 @@ func rollForInitiative(newName: String, newInit: Int, newHP:
             turnPos = charsOrdered[i].order!
             
             charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos)
-            break
+            printLastChange(characterName: newName)
+            return
         }
     }
     
     charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos + 1)
+    printLastChange(characterName: newName)
 }

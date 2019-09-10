@@ -9,6 +9,27 @@
 import Foundation
 
 
+func help() {
+    print("---------------- Help ----------------")
+    print(
+        """
+        new birbman i7 hp15/21 ac13 | new [Name] i[Initiative], hp[HP]/[maxHP], ac[AC]
+        birbman hp +8               | adds 8 HP
+        birbman hp -7               | removes 7 HP
+        birbman status [status]     | adds [status]
+        birbman remove [status]     | removes [status]
+        birbman out                 | Birbman leaves battle order
+        birbman in                  | Birbman returns to battle order
+        birbman info                | shows all Birbman's info
+        birbman log                 | shows history of Birbman's actions
+        next                        | next turn
+        game                        | print game summary
+        exit                        | exit
+        """)
+    print("---------------- Help end ----------------")
+}
+
+
 //  New character
 func new(command: [String]) {
     
@@ -206,13 +227,13 @@ func game() {
 
 
 func exit() {
-    print("Are you sure you want to exit?")
+    print("Are you sure you want to exit?  y/n")
     let confirm1 = confirm()
     if confirm1 == true {
-        print("Double sure?")
+        print("Double sure?  y/n")
         let confirm2 = confirm()
         if confirm2 == true {
-            //  stop run loop
+            runProgram = false
         }
     }
 }
