@@ -8,6 +8,17 @@
 
 import Foundation
 
+/*
+ GENERAL TOOLS:
+  24.  Seek confirmation -> Bool
+  42.  Direct integer input -> Int
+  58.  Find character in charOrdered array -> Int
+  69.  Print character's last changeLog entry -> Void
+  83.  Identify command prefix -> Bool                  (MAYBE GET RID OF THIS STEP)
+  98.  Extract inputs from command prefix -> String     (MAYBE GET RID OF THIS STEP)
+  108. Display current turn and info -> Void
+ */
+
 
 //  Seek confirmation
 func confirm() -> Bool {
@@ -54,6 +65,7 @@ func findCharInArray(characterName: String) -> Int {
 }
 
 
+//  Print the last entry in the character's changeLog
 func printLastChange(characterName: String) {
     let charIndex: Int = findCharInArray(characterName: characterName)
     
@@ -92,56 +104,74 @@ func extractInputs(input: String, identifier: String) -> String {
 }
 
 
+//  Display the current turn and information
 func displayCurrentTurn() {
+    /*
+         Frog            HP 21/21    AC 7    ["Status", "Status"]
+     CAT                 HP 21/21    AC 13
+         Bird
+         Dog             HP 14/15    AC 14   ["Status"]
+     
+     Not turn, in battle:
+      - 4 spaces to left
+      - padding to 16
+      - hp padding to 12
+      - ac padding to 9
+     
+     turn, in battle:
+      - all caps
+      - no spaces to left
+      - padding to 20
+      - hp padding to 12
+      - ac padding to 9
+     
+     out of battle:
+      - 4 spaces to left
+     
+    */
     print("--------------------------------------------------")
-    let turnMarker: String = ">>--->  "
-    let removedMarker: String = "x_x "
+    
     
     for i in 0..<currentOrder.count {
-        let charObj = currentOrder[i]
-        let charNamePadded = charObj.charName.padding(toLength: 16, withPad: " ", startingAt: 0)
+        let charName: String = currentOrder[i].charName
+        let namePad = charName.padding(toLength: 16, withPad: " ", startingAt: 0)
+        
+        let hpRaw: String = String(currentOrder[i].hitPoints)
+        let maxHPRaw: String = String(currentOrder[i].maxHitPoints)
+        let hpStat: String = "HP " + hpRaw + "/" + maxHPRaw
+        let hpPad: String = hpStat.padding(toLength: 12, withPad: " ", startingAt: 0)
+        
+        let acRaw: String = String(currentOrder[i].armorClass)
+        let acStat: String = "AC " + acRaw
+        let acPad: String = acStat.padding(toLength: 9, withPad: " ", startingAt: 0)
+        
         
         //  Is in battle and is current turn
         if i == turn {
-
-            if charObj.statuses.count > 0 {
-                print("\(turnMarker)" + "\(charNamePadded.uppercased())" +
-                    "    HP: \(charObj.hitPoints)/\(charObj.maxHitPoints)" +
-                    "    AC: \(charObj.armorClass)" +
-                    "    Statuses: \(charObj.statuses)")
+            let namePadTurn: String = charName.padding(toLength: 20,
+                                                       withPad: " ",
+                                                       startingAt: 0)
+            if currentOrder[i].statuses.count > 0 {
+                print("\(namePadTurn)\(hpPad)\(acPad)" +
+                    "\(currentOrder[i].statuses)")
             } else {
-                print("\(turnMarker)" + "\(charNamePadded.uppercased())" +
-                    "    HP: \(charObj.hitPoints)/\(charObj.maxHitPoints)" +
-                    "    AC: \(charObj.armorClass)")
+                print("\(namePadTurn)\(hpPad)\(acPad)")
             }
             
         } else {
             //  In battle and not in turn
             if currentOrder[i].participating == true {
                 
-                if charObj.statuses.count > 0 {
-                    print("\(charNamePadded)" +
-                        "    HP: \(charObj.hitPoints)/\(charObj.maxHitPoints)" +
-                        "    AC: \(charObj.armorClass)" +
-                        "    Statuses: \(charObj.statuses)")
+                if currentOrder[i].statuses.count > 0 {
+                    print("    " + "\(namePad)\(hpPad)\(acPad)" +
+                        "\(currentOrder[i].statuses)")
                 } else {
-                    print("\(charNamePadded)" +
-                        "    HP: \(charObj.hitPoints)/\(charObj.maxHitPoints)" +
-                        "    AC: \(charObj.armorClass)")
+                    print("    " + "\(namePad)\(hpPad)\(acPad)")
                 }
                 
             } else {
                 //  Is not in battle and not in turn
-                if charObj.statuses.count > 0 {
-                    print("\(removedMarker)" + "\(charNamePadded.lowercased())" +
-                        "    HP: \(charObj.hitPoints)/\(charObj.maxHitPoints)" +
-                        "    AC: \(charObj.armorClass)" +
-                        "    Statuses: \(charObj.statuses)")
-                } else {
-                    print("\(removedMarker)" + "\(charNamePadded.lowercased())" +
-                        "    HP: \(charObj.hitPoints)/\(charObj.maxHitPoints)" +
-                        "    AC: \(charObj.armorClass)")
-                }
+                print("    " + "\(charName)")
             }
             
         }

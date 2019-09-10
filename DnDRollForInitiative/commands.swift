@@ -229,13 +229,8 @@ func game() {
 
 func exit() {
     print("Are you sure you want to exit?  y/n")
-    let confirm1 = confirm()
-    if confirm1 == true {
-        print("Double sure?  y/n")
-        let confirm2 = confirm()
-        if confirm2 == true {
-            runProgram = false
-        }
+    if confirm() == true {
+        runProgram = false
     }
 }
 

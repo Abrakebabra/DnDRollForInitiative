@@ -29,22 +29,28 @@ func charInfo(charIndex: Int) {
     let armorClass: Int = charObj.armorClass
     let statuses: [String] = charObj.statuses
     
-    print("------------ \(charName.uppercased())'s Information ------------")
+    print("------------ \(charName.uppercased()) ------------")
     if participating == true {
-        print("In Battle")
+        print("IN BATTLE")
     } else {
-        print("Out of Battle")
+        print("OUT OF ACTION")
     }
-    print("Initiative:       [\(initiative)]")
-    if let dexterity: Int = charObj.dexterity {
-        print("Dexterity:        [\(dexterity)]")
-    }
-    print("Hit Points:       [\(hp) / \(maxHP)]")
-    print("Armor Class:      [\(armorClass)]")
+    print("Hit Points".padding(toLength: 18, withPad: " ", startingAt: 0) +
+        "\(hp)/\(maxHP)")
+    print("Armor Class".padding(toLength: 18, withPad: " ", startingAt: 0) +
+        "\(armorClass)")
     if statuses.count > 0 {
-        print("Status Effects:      \(statuses)")
+        print("Status Effects".padding(toLength: 18, withPad: " ", startingAt: 0) +
+            "\(statuses)")
     }
-    print("------------ End of \(charName.uppercased())'s Information ------------")
+    print("Initiative".padding(toLength: 18, withPad: " ", startingAt: 0) +
+        "\(initiative)")
+    if let dexterity: Int = charObj.dexterity {
+        print("Dexterity".padding(toLength: 18, withPad: " ", startingAt: 0) +
+            "\(dexterity)\n")
+    }
+    
+    print("------------ \(charName.uppercased()) ------------")
 }
 
 
