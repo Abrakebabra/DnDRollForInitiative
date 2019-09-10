@@ -218,7 +218,7 @@ func exit() {
 }
 
 
-func characterModify(command: [String]) -> Void {
+func characterCommands(command: [String]) -> Void {
     /*
      Commands:
      birbman hp +8               | adds 8 HP
@@ -231,22 +231,12 @@ func characterModify(command: [String]) -> Void {
      birbman log                 | shows history of Birbman's actions
     */
     let characterName: String = command[0]
-    let characterIndex: Int
-    let action: String = command[1]
-    let actionInput: String
-    var characterFound: Bool = false
+    let characterIndex: Int = findCharInArray(characterName: characterName)
+    var actionInput: String = ""
     
-    //  Find where the character is in the array
-    for i in 0..<charsOrdered.count {
-        if charsOrdered[i].charName == characterName {
-            characterIndex = i
-            characterFound = true
-            break
-        }
-    }
-    
+   
     //  If character not found, notify and exit
-    if characterFound == false {
+    if characterIndex == -1 {
         print("Character not found!")
         return
     }
@@ -263,15 +253,15 @@ func characterModify(command: [String]) -> Void {
     
     switch command[1] {
     case "Hp":
-        //  do something
+        charHp(charIndex: characterIndex, modifier: actionInput)
     case "Status":
-        //  do something
+        charsOrdered[characterIndex].addStatus(stat: actionInput)
     case "Remove":
-        //  do something
+        charsOrdered[characterIndex].removeStatus(stat: actionInput)
     case "Out":
-        //  do something
+        charsOrdered[characterIndex].inBattle(trueFalse: false)
     case "In":
-        //  do something
+        charsOrdered[characterIndex].inBattle(trueFalse: true)
     case "Info":
         charInfo(charIndex: characterIndex)
     case "Log":

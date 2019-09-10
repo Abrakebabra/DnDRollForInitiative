@@ -80,7 +80,7 @@ class Characters {
     }
     
     
-    func participant(trueFalse state: Bool) {
+    func inBattle(trueFalse state: Bool) {
         
         if state == false {
             print("Remove \(charName) from battle?")
@@ -139,7 +139,7 @@ class Characters {
                     let input: String? = readLine()
                     
                     if input == "r" {
-                        participant(trueFalse: false)
+                        inBattle(trueFalse: false)
                         
                         //  if positive confirmation given in participant()
                         if participating == false {

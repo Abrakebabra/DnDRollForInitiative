@@ -38,3 +38,13 @@ var charsOrdered: [Characters] = []
 var currentOrder: [Characters] = []  //  Copies order when finished all turns
 var turn: Int = 0
 
+var runProgram: Bool = true
+
+while runProgram == true {
+    let rawInput: String? = readLine()
+    if let stringInput: String = rawInput {
+        inputToCommands(input: stringInput)
+    }
+}
+
+print("Fin.")

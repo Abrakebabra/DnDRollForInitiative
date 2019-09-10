@@ -69,6 +69,7 @@ func extractInputs(input: String, identifier: String) -> String {
 
 
 func displayCurrentTurn() {
+    print("--------------------------------------------------")
     let turnMarker: String = ">>--->  "
     let removedMarker: String = "x   "
     
@@ -79,12 +80,26 @@ func displayCurrentTurn() {
         if i == turn {
             
             if charObj.statuses.count > 0 {
-                print("\(turnMarker) + \(charObj.charName)" +
+                print("\(turnMarker)" +
+                    "\(charObj.charName)" +
                     "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
                     "  AC: [\(charObj.armorClass)]" +
                     "  Statuses: \(charObj.statuses)")
             } else {
                 print("\(turnMarker) + \(charObj.charName)" +
+                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
+                    "  AC: [\(charObj.armorClass)]")
+            }
+            
+        } else {
+            //  In battle but not in turn
+            if charObj.statuses.count > 0 {
+                print("\(charObj.charName)" +
+                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
+                    "  AC: [\(charObj.armorClass)]" +
+                    "  Statuses: \(charObj.statuses)")
+            } else {
+                print("\(charObj.charName)" +
                     "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
                     "  AC: [\(charObj.armorClass)]")
             }
@@ -104,19 +119,7 @@ func displayCurrentTurn() {
                     "  AC: [\(charObj.armorClass)]")
             }
             
-        } else {
-            
-            //  In battle but not in turn
-            if charObj.statuses.count > 0 {
-                print("\(charObj.charName)" +
-                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
-                    "  AC: [\(charObj.armorClass)]" +
-                    "  Statuses: \(charObj.statuses)")
-            } else {
-                print("\(charObj.charName)" +
-                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
-                    "  AC: [\(charObj.armorClass)]")
-            }
         }
     }
+    print("--------------------------------------------------")
 }

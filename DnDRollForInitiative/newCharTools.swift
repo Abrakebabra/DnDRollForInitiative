@@ -121,7 +121,7 @@ func sameDexInsert(sameDexCharList: [Characters], newName: String, newInit: Int,
         print("Enter [num] position:")
         
         let orderInput: Int = inputInt()
-        if orderInput >= firstIndex && orderInput <= lastIndex {
+        if orderInput >= firstIndex && orderInput <= lastIndex + 1{
             charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: orderInput)
             charsOrdered[orderInput].dexterity = newDex
             inputAccepted = true

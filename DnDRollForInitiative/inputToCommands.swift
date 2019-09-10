@@ -42,7 +42,7 @@ func inputToCommands(input: String) {
         exit()
     default:
         // find character
-        characterModify(command: commands)
+        characterCommands(command: commands)
     }
     
     /*

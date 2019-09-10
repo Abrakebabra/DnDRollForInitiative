@@ -9,28 +9,25 @@
 import Foundation
 
 
+//  Find where the character is in the array
+func findCharInArray(characterName: String) -> Int {
+    for i in 0..<charsOrdered.count {
+        if charsOrdered[i].charName == characterName {
+            return i
+        }
+    }
+    return -1
+}
+
+
+
 func charHp(charIndex: Int, modifier: String) {
-    
-}
-
-
-func charStatus(charIndex: Int, newStatus: String) {
-    // convert to Int
-}
-
-
-func charRemove(charIndex: Int, remStatus: String) {
-    
-}
-
-
-func charOut() {
-    
-}
-
-
-func charIn() {
-    
+    guard let modInt: Int = Int(modifier) else {
+        print("Check format.  Should be like:\n" +
+            "    birbman hp -7")
+        return
+    }
+    charsOrdered[charIndex].modHitPoints(mod: modInt)
 }
 
 
