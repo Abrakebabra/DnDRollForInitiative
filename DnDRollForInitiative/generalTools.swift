@@ -79,7 +79,7 @@ func printLastChange(characterName: String) {
 }
 
 
-//  Identify inputs
+//  Identify inputs  (OBSOLETE)
 func identifyInputs(input: String, lookFor: String) -> Bool {
     let startIndex = input.index(input.startIndex, offsetBy: 0)
     let endIndex = input.index(input.startIndex, offsetBy: lookFor.count)
@@ -94,7 +94,7 @@ func identifyInputs(input: String, lookFor: String) -> Bool {
 }
 
 
-//  Extract inputs from commands entered
+//  Extract inputs from commands entered  (OBSOLETE)
 func extractInputs(input: String, identifier: String) -> String {
     let startIndex = input.index(input.startIndex, offsetBy: identifier.count)
     let endIndex = input.index(input.endIndex, offsetBy: 0)

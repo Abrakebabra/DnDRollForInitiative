@@ -36,7 +36,7 @@ func inputDex(char: String) -> Int {
     while awaitingDex == true {
         print("What is \(char)'s dexterity:")
         let dexInput = inputInt()
-        print("\(char) dexterity: [\(dexInput)] ok?")
+        print("\(char)'s Dex [\(dexInput)] ok?  y/n")
         if confirm() == true {
             awaitingDex = false
             return dexInput
@@ -118,7 +118,7 @@ func sameDexInsert(sameDexCharList: [Characters], newName: String, newInit: Int,
         }
         
         print("---\nLast")
-        print("Enter [num] position:")
+        print("Enter [#] position:")
         
         let orderInput: Int = inputInt()
         if orderInput >= firstIndex && orderInput <= lastIndex + 1{

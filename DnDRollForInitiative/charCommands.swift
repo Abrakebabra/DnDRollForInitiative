@@ -1,5 +1,5 @@
 //
-//  charCommandTools.swift
+//  charCommands.swift
 //  DnDRollForInitiative
 //
 //  Created by Keith Lee on 2019/09/09.
@@ -16,6 +16,7 @@ func charHp(charIndex: Int, modifier: String) {
         return
     }
     charsOrdered[charIndex].modHitPoints(mod: modInt)
+    displayCurrentTurn()
 }
 
 

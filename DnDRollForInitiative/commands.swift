@@ -13,18 +13,19 @@ func help() {
     print("---------------- Help ----------------")
     print(
         """
-        new birbman i7 hp15/21 ac13 | new [Name] i[Initiative], hp[HP]/[maxHP], ac[AC]
-        birbman hp +8               | adds 8 HP
-        birbman hp -7               | removes 7 HP
-        birbman status [status]     | adds [status]
-        birbman remove [status]     | removes [status]
-        birbman out                 | Birbman leaves battle order
-        birbman in                  | Birbman returns to battle order
-        birbman info                | shows all Birbman's info
-        birbman log                 | shows history of Birbman's actions
-        next                        | next turn
-        game                        | print game summary
-        exit                        | exit
+        new birbman 7 15 21 13      |  new [Name] [Initiative] [HP] [maxHP] [AC]
+        birbman 8                   |  adds 8 HP
+        birbman -7                  |  removes 7 HP
+        birbman [status]            |  adds [status]
+        birbman remove [status]     |  removes [status]
+        birbman out                 |  Birbman leaves battle order
+        birbman in                  |  Birbman returns to battle order
+        birbman info                |  shows all Birbman's info
+        birbman log                 |  shows history of Birbman's actions
+        next                        |  next turn
+        d                           |  re-displays current turn and info
+        game                        |  print game summary
+        exit                        |  exit
         """)
     print("---------------- Help end ----------------")
 }
@@ -33,73 +34,54 @@ func help() {
 //  New character
 func new(command: [String]) {
     
+    /*
+        Direct entry
+        new birbman 9 28 28 13
+        - command.count == 6
+        - var entryOK = false and changed to true when all conditions met
+        - command[2] can be turned into an integer
+        - command[3] can be turned into an integer
+        - command[4] can be turned into an integer
+        - command[5] can be turned into an integer
+        - checks all conditions are met
+        - shows confirmation of character stats
+    */
+    
+    // Check that there are 6 commands
+    if command.count != 6 {
+        print("Should be like: new birbman 9 28 28 13")
+        return
+    }
+    
     let charName: String = command[1]
-    let initiative: Int
-    let hp: Int
-    let maximumHP: Int
-    let ac: Int
     
     if sameNameCheck(check: charName) == true {
         print("Same name already entered!")
         return
     }
     
-    //  Perhaps prompts might be better than writing out a string of text
-    if identifyInputs(input: command[2], lookFor: "I") == true {
-        let iData: String = extractInputs(input: command[2], identifier: "I")
-        if let iDataInt: Int = Int(iData) {
-            initiative = iDataInt
-        } else {
-            print("Check [i]nitiative number.  " +
-                "Should be like: new birbman i7 hp15/21 ac13")
-            return
-        }
-    } else {
-        print("Can't find [i]nitiative.  " +
-            "Should be like: new birbman i7 hp15/21 ac13")
-        return
-    }
-    
-    if identifyInputs(input: command[3], lookFor: "Hp") == true {
-        let hpData: String = extractInputs(input: command[3], identifier: "Hp")
-        let hpDataSeparated: [String] = hpData.components(separatedBy: "/")
+    guard let initiative: Int = Int(command[2]),
+        let hp: Int = Int(command[3]),
+        let maximumHP: Int = Int(command[4]),
+        let ac: Int = Int(command[5])
         
-        if let hpDataInt: Int = Int(hpDataSeparated[0]) {
-            hp = hpDataInt
-        } else {
-            print("Check [hp] number.  " +
-                "Should be like: new birbman i7 hp15/21 ac13")
-            return
-        }
-        
-        if let maxHPDataInt: Int = Int(hpDataSeparated[1]) {
-            maximumHP = maxHPDataInt
-        } else {
-            print("Check [hp] number.  " +
-                "Should be like: new birbman i7 hp15/21 ac13")
-            return
-        }
-    } else {
-        print("Can't find [hp].  " +
-            "Should be like: new birbman i7 hp15/21 ac13")
+    else {
+        print("new [name] [initiative] [hp] [max] [ac]\n" +
+            "Command not recognized.\nShould be like: new birbman 9 28 28 13")
         return
     }
     
-    if identifyInputs(input: command[4], lookFor: "Ac") == true {
-        let acData: String = extractInputs(input: command[4], identifier: "Ac")
-        if let acDataInt: Int = Int(acData) {
-            ac = acDataInt
-        } else {
-            print("Check [ac] number.  " +
-                "Should be like: new birbman i7 hp15/21 ac13")
-            return
-        }
-    } else {
-        print("Can't find [ac].  " +
-            "Should be like: new birbman i7 hp15/21 ac13")
+    let namePad = charName.padding(toLength: 16, withPad: " ", startingAt: 0)
+    let hpStat: String = "HP " + String(hp) + "/" + String(maximumHP)
+    let hpPad: String = hpStat.padding(toLength: 12, withPad: " ", startingAt: 0)
+    let acStat: String = "AC " + String(ac)
+    
+    print("\(namePad)\(hpPad)\(acStat)\nIs this ok?  y/n")
+    
+    if confirm() == false {
+        print("New character cancelled")
         return
     }
-    
     
     if charsOrdered.count > 0 {
         let sameInitChars: [Characters] = sameInitiativeCheck(testInit: initiative)
@@ -147,20 +129,6 @@ func new(command: [String]) {
     }
     
 }
-
-
-
-/*
- Perhaps a slow prompted add, and a quick single line add
-
- For example:
- [Name] [Initiative] [HP/MAX] [AC]
- 
- please enter in format of:  name 15 18/18 12
- 
- */
-
-
 
 
 func next() {
@@ -231,6 +199,7 @@ func exit() {
     print("Are you sure you want to exit?  y/n")
     if confirm() == true {
         runProgram = false
+        game()
     }
 }
 
@@ -238,9 +207,9 @@ func exit() {
 func characterCommands(command: [String]) -> Void {
     /*
      Commands:
-     birbman hp +8               | adds 8 HP
-     birbman hp -7               | removes 7 HP
-     birbman status [status]     | adds [status]
+     birbman 8                   | adds 8 HP
+     birbman -7                  | removes 7 HP
+     birbman [status]            | adds [status]
      birbman remove [status]     | removes [status]
      birbman out                 | Birbman leaves battle order
      birbman in                  | Birbman returns to battle order
@@ -293,8 +262,15 @@ func characterCommands(command: [String]) -> Void {
     case "Log":
         charLog(charIndex: characterIndex)
     default:
-        print("Check format.  Should be like:\n" +
-            "    birbman hp -7    or    birbman status bananas")
+        /*
+          - command.count == 2
+         
+         Mod HP:
+          - command[1] can be converted to integer, else add status
+         
+         Add status:
+          - command[1] cannot be converted to integer
+         */
         return
     }
     

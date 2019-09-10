@@ -40,9 +40,7 @@ class Characters {
         
         if confirm() == true {
             dexterity = dex
-            changeLog.append("\(charName):  Dexterity stat added " +
-                "[\(dexterity!)]")
-            printLastChange(characterName: charName)
+            changeLog.append("\(charName)'s Dex: \(dexterity!)")
         }
     }
     
@@ -52,16 +50,18 @@ class Characters {
         
         if confirm() == true {
             statuses.append(stat)
-            gameLog.append("\(charName) has status effect: [\(stat)]!")
-            changeLog.append("\(charName) has status effect: [\(stat)]")
+            gameLog.append("\(charName) has status effect [\(stat)]!")
+            changeLog.append("\(charName) has status effect [\(stat)]")
             printLastChange(characterName: charName)
+        } else {
+            print("Add [\(stat)] cancelled")
         }
     }
     
     
     func removeStatus(stat: String) {
         guard let index = statuses.firstIndex(of: stat) else {
-            print("Status: [\(stat)] not found")
+            print("[\(stat)] not found")
             return
         }
         
@@ -69,12 +69,13 @@ class Characters {
         
         if confirm() == true {
             self.statuses.remove(at: index)
-            gameLog.append("\(charName) no longer has status effect: " +
+            gameLog.append("\(charName) no longer has status effect " +
                 "[\(stat)]!")
-            changeLog.append("\(charName) no longer has status effect: " +
+            changeLog.append("\(charName) no longer has status effect " +
                 "[\(stat)]")
             printLastChange(characterName: charName)
         }
+        //  No need for confirmation of removal.  Hard to accidentally do this.
         
     }
     
@@ -97,7 +98,7 @@ class Characters {
             if confirm() == true {
                 participating = state
                 gameLog.append("\(charName) is back in the fight!")
-                changeLog.append("\(charName) is added back to battle")
+                changeLog.append("\(charName) is returned to battle")
                 printLastChange(characterName: charName)
             }
         }
