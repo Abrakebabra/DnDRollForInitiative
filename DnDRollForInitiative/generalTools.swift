@@ -50,8 +50,6 @@ func findCharInArray(characterName: String) -> Int {
             return i
         }
     }
-    print("charsOrdered.count: \(charsOrdered.count)")
-    print("can't find")
     return -1
 }
 
@@ -97,54 +95,58 @@ func extractInputs(input: String, identifier: String) -> String {
 func displayCurrentTurn() {
     print("--------------------------------------------------")
     let turnMarker: String = ">>--->  "
-    let removedMarker: String = "x   "
+    let removedMarker: String = "x_x "
     
     for i in 0..<currentOrder.count {
         let charObj = currentOrder[i]
+        let charNamePadded = charObj.charName.padding(toLength: 16, withPad: " ", startingAt: 0)
         
-        //  Is current turn
+        //  Is in battle and is current turn
         if i == turn {
-            
+
             if charObj.statuses.count > 0 {
-                print("\(turnMarker)" + "\(charObj.charName)" +
-                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
-                    "  AC: [\(charObj.armorClass)]" +
-                    "  Statuses: \(charObj.statuses)")
+                print("\(turnMarker)" + "\(charNamePadded.uppercased())" +
+                    "    HP: \(charObj.hitPoints)/\(charObj.maxHitPoints)" +
+                    "    AC: \(charObj.armorClass)" +
+                    "    Statuses: \(charObj.statuses)")
             } else {
-                print("\(turnMarker)" + "\(charObj.charName)" +
-                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
-                    "  AC: [\(charObj.armorClass)]")
+                print("\(turnMarker)" + "\(charNamePadded.uppercased())" +
+                    "    HP: \(charObj.hitPoints)/\(charObj.maxHitPoints)" +
+                    "    AC: \(charObj.armorClass)")
             }
             
         } else {
-            //  In battle but not in turn
-            if charObj.statuses.count > 0 {
-                print("\(charObj.charName)" +
-                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
-                    "  AC: [\(charObj.armorClass)]" +
-                    "  Statuses: \(charObj.statuses)")
+            //  In battle and not in turn
+            if currentOrder[i].participating == true {
+                
+                if charObj.statuses.count > 0 {
+                    print("\(charNamePadded)" +
+                        "    HP: \(charObj.hitPoints)/\(charObj.maxHitPoints)" +
+                        "    AC: \(charObj.armorClass)" +
+                        "    Statuses: \(charObj.statuses)")
+                } else {
+                    print("\(charNamePadded)" +
+                        "    HP: \(charObj.hitPoints)/\(charObj.maxHitPoints)" +
+                        "    AC: \(charObj.armorClass)")
+                }
+                
             } else {
-                print("\(charObj.charName)" +
-                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
-                    "  AC: [\(charObj.armorClass)]")
-            }
-        }
-        
-        //  Is not in battle
-        if currentOrder[i].participating == false {
-            
-            if charObj.statuses.count > 0 {
-                print("\(removedMarker) + \(charObj.charName)" +
-                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
-                    "  AC: [\(charObj.armorClass)]" +
-                    "  Statuses: \(charObj.statuses)")
-            } else {
-                print("\(removedMarker) + \(charObj.charName)" +
-                    "  HP: [\(charObj.hitPoints) / \(charObj.maxHitPoints)]" +
-                    "  AC: [\(charObj.armorClass)]")
+                //  Is not in battle and not in turn
+                if charObj.statuses.count > 0 {
+                    print("\(removedMarker)" + "\(charNamePadded.lowercased())" +
+                        "    HP: \(charObj.hitPoints)/\(charObj.maxHitPoints)" +
+                        "    AC: \(charObj.armorClass)" +
+                        "    Statuses: \(charObj.statuses)")
+                } else {
+                    print("\(removedMarker)" + "\(charNamePadded.lowercased())" +
+                        "    HP: \(charObj.hitPoints)/\(charObj.maxHitPoints)" +
+                        "    AC: \(charObj.armorClass)")
+                }
             }
             
         }
+        //  characters out of battle will never be in turn due to
+        //  conditions of next() function
     }
     print("--------------------------------------------------")
 }

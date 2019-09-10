@@ -42,7 +42,7 @@ func charInfo(charIndex: Int) {
     print("Hit Points:       [\(hp) / \(maxHP)]")
     print("Armor Class:      [\(armorClass)]")
     if statuses.count > 0 {
-        print("Status Effects:       \(statuses)")
+        print("Status Effects:      \(statuses)")
     }
     print("------------ End of \(charName.uppercased())'s Information ------------")
 }

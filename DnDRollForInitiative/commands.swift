@@ -143,6 +143,7 @@ func new(command: [String]) {
         //  Insert first character
         charsOrdered.append(Characters(name: charName,ini: initiative,
                                        HP: hp, maxHP: maximumHP, AC: ac))
+        printLastChange(characterName: charName)
     }
     
 }
@@ -253,6 +254,7 @@ func characterCommands(command: [String]) -> Void {
     */
     let characterName: String = command[0]
     let characterIndex: Int = findCharInArray(characterName: characterName)
+    var action: String = ""
     var actionInput: String = ""
     
    
@@ -264,6 +266,14 @@ func characterCommands(command: [String]) -> Void {
     
     //  If there is a 3rd command, assign it as the action input
     //  If there are more, cancel the function and notify format is incorrect
+    if command.count < 2 {
+        print("Check format.  Should be like:\n" +
+            "    birbman hp -7 or birbman status bananas")
+        return
+    } else {
+        action = command[1]
+    }
+    
     if command.count > 2 {
         actionInput = command[2]
     } else if command.count > 3 {
@@ -272,7 +282,7 @@ func characterCommands(command: [String]) -> Void {
         return
     }
     
-    switch command[1] {
+    switch action {
     case "Hp":
         charHp(charIndex: characterIndex, modifier: actionInput)
     case "Status":

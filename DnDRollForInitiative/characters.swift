@@ -31,29 +31,29 @@ class Characters {
         changeLog.append("Character: \(charName), Initiative: \(initiative)" +
             ", HP: \(hitPoints) / \(maxHitPoints), AC: \(armorClass)")
         gameLog.append("\(charName) has entered the fight with " +
-            "[ \(hitPoints) / \(maxHitPoints) HP]!")
+            "[\(hitPoints) / \(maxHitPoints) HP]!")
     }
     
     
     func sameInitiative(dex: Int) {
-        print("Dexterity of [ \(dex) ] for \(charName)?  y/n")
+        print("Dexterity of [\(dex)] for \(charName)?  y/n")
         
         if confirm() == true {
             dexterity = dex
             changeLog.append("\(charName):  Dexterity stat added " +
-                "[ \(dexterity!) ]")
+                "[\(dexterity!)]")
             printLastChange(characterName: charName)
         }
     }
     
     
     func addStatus(stat: String) {
-        print("Add status effect of [ \(stat) ] to \(charName)?  y/n")
+        print("Add status effect of [\(stat)] to \(charName)?  y/n")
         
         if confirm() == true {
             statuses.append(stat)
-            gameLog.append("\(charName) has status effect: [ \(stat) ]!")
-            changeLog.append("\(charName) has status effect: [ \(stat) ]")
+            gameLog.append("\(charName) has status effect: [\(stat)]!")
+            changeLog.append("\(charName) has status effect: [\(stat)]")
             printLastChange(characterName: charName)
         }
     }
@@ -61,18 +61,18 @@ class Characters {
     
     func removeStatus(stat: String) {
         guard let index = statuses.firstIndex(of: stat) else {
-            print("Status: [ \(stat) ] not found")
+            print("Status: [\(stat)] not found")
             return
         }
         
-        print("Remove status effect of [ \(stat) ] from \(charName)?  y/n")
+        print("Remove status effect of [\(stat)] from \(charName)?  y/n")
         
         if confirm() == true {
             self.statuses.remove(at: index)
             gameLog.append("\(charName) no longer has status effect: " +
-                "[ \(stat) ]!")
+                "[\(stat)]!")
             changeLog.append("\(charName) no longer has status effect: " +
-                "[ \(stat) ]")
+                "[\(stat)]")
             printLastChange(characterName: charName)
         }
         
@@ -166,14 +166,14 @@ class Characters {
         
         func loseHP(change: Int) {
             print("\(charName)'s HP: \(hitPoints) -\(abs(change)) " +
-                "-> [ \(Int(hitPoints + change)) ]?  y/n")
+                "-> [\(Int(hitPoints + change))]?  y/n")
             
             if confirm() == true {
                 hitPoints += change
                 if hitPoints > 0 {
                     gameLog.append("\(charName) has lost \(abs(change)) " +
-                        "HP down to a total of [ \(hitPoints) ]!")
-                    changeLog.append("\(charName)'s HP: [ \(hitPoints) ] " +
+                        "HP down to a total of [\(hitPoints)]!")
+                    changeLog.append("\(charName)'s HP: [\(hitPoints)] " +
                         "(lost \(abs(change))")
                 } else {
                     zeroOrBelowHP()
