@@ -9,17 +9,6 @@
 import Foundation
 
 
-func charHp(charIndex: Int, modifier: String) {
-    guard let modInt: Int = Int(modifier) else {
-        print("Check format.  Should be like:\n" +
-            "    birbman hp -7")
-        return
-    }
-    charsOrdered[charIndex].modHitPoints(mod: modInt)
-    displayCurrentTurn()
-}
-
-
 func charInfo(charIndex: Int) {
     let charObj: Characters = charsOrdered[charIndex]
     let charName: String = charObj.charName
@@ -51,7 +40,7 @@ func charInfo(charIndex: Int) {
             "\(dexterity)\n")
     }
     
-    print("------------ \(charName.uppercased()) ------------")
+    print("------------ \(charName.lowercased()) ------------")
 }
 
 

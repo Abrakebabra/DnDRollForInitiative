@@ -28,8 +28,8 @@ class Characters {
         hitPoints = HP
         maxHitPoints = maxHP
         armorClass = AC
-        changeLog.append("Character: \(charName), Initiative: \(initiative)" +
-            ", HP: \(hitPoints) / \(maxHitPoints), AC: \(armorClass)")
+        changeLog.append("Character \(charName)    Initiative (initiative)    " +
+            "HP \(hitPoints)/\(maxHitPoints)    AC \(armorClass)")
         gameLog.append("\(charName) has entered the fight with " +
             "[\(hitPoints) / \(maxHitPoints) HP]!")
     }
@@ -46,7 +46,7 @@ class Characters {
     
     
     func addStatus(stat: String) {
-        print("Add status effect of [\(stat)] to \(charName)?  y/n")
+        print("\(charName):  Add status effect [\(stat)]?  y/n")
         
         if confirm() == true {
             statuses.append(stat)
@@ -65,64 +65,84 @@ class Characters {
             return
         }
         
-        print("Remove status effect of [\(stat)] from \(charName)?  y/n")
-        
-        if confirm() == true {
-            self.statuses.remove(at: index)
-            gameLog.append("\(charName) no longer has status effect " +
-                "[\(stat)]!")
-            changeLog.append("\(charName) no longer has status effect " +
-                "[\(stat)]")
-            printLastChange(characterName: charName)
-        }
         //  No need for confirmation of removal.  Hard to accidentally do this.
-        
+        self.statuses.remove(at: index)
+        gameLog.append("\(charName) no longer has status effect " +
+            "[\(stat)]!")
+        changeLog.append("\(charName) no longer has status effect " +
+            "[\(stat)]")
+        printLastChange(characterName: charName)
     }
     
     
     func inBattle(trueFalse state: Bool) {
         
-        if state == false {
-            print("Remove \(charName) from battle?")
+        //  Return character to battle
+        if state == true {
             
-            if confirm() == true {
-                participating = state
-                gameLog.append("\(charName) is out of battle!")
-                changeLog.append("\(charName) is removed from battle")
-                printLastChange(characterName: charName)
+            if participating == true {
+                print("\(charName) is already in battle")
+                return
             }
-            
+
+            participating = state
+            gameLog.append("\(charName) is back in the fight!")
+            changeLog.append("\(charName) is returned to battle")
+            printLastChange(characterName: charName)
+        
+        //  Remove character from battle
         } else {
-            print("Return \(charName) to battle?")
             
-            if confirm() == true {
-                participating = state
-                gameLog.append("\(charName) is back in the fight!")
-                changeLog.append("\(charName) is returned to battle")
-                printLastChange(characterName: charName)
+            if participating == false {
+                print("\(charName) is already out of battle")
+                return
             }
+            
+            participating = state
+            gameLog.append("\(charName) is out of battle!")
+            changeLog.append("\(charName) is out of battle")
+            printLastChange(characterName: charName)
         }
     }
     
     
     func modHitPoints(mod: Int) {
         
-        func gainHP(change: Int) {
+        
+        func hpCalcAboveMax(change: Int) {
+            var awaitingInput: Bool = true
             
-            if hitPoints + change > maxHitPoints {
-                print("-<<<****- Hit points will be above maximum -****>>>-")
-            }
-            
-            print("\(charName)'s HP: \(hitPoints) +\(abs(change)) " +
-                "-> [\(Int(hitPoints + change)) / \(maxHitPoints)]?  y/n")
-            
-            if confirm() == true {
-                hitPoints += change
-                gameLog.append("\(charName) has gained \(abs(change)) " +
-                    "HP up to a total of [\(hitPoints)]")
-                changeLog.append("\(charName)'s HP: [\(hitPoints)] " +
-                    "(gained \(change))")
-                printLastChange(characterName: charName)
+            while awaitingInput == true {
+                print("\(charName)'s HP will go beyond max HP " +
+                    "(\(hitPoints + change)/\(maxHitPoints))\n" +
+                    "[m]ax or [b]eyond?")
+                let input: String? = readLine()
+                
+                //  Set hp to max hit points
+                if input == "m" {
+                    hitPoints = maxHitPoints
+                    
+                    gameLog.append("\(charName) has gained " +
+                        "\(maxHitPoints - hitPoints) " +
+                        "HP up to a total of \(hitPoints)/\(maxHitPoints)")
+                    changeLog.append("\(charName)'s HP:  \(hitPoints) " +
+                        "(gained \(maxHitPoints - hitPoints))")
+                    printLastChange(characterName: charName)
+                    awaitingInput = false
+                    
+                    //  Let hp go beyond max hit points
+                } else if input == "b" {
+                    hitPoints += change
+                    
+                    gameLog.append("\(charName) has gained \(abs(change)) " +
+                        "HP up to a total of \(hitPoints)/\(maxHitPoints)!")
+                    changeLog.append("\(charName)'s HP:  \(hitPoints) " +
+                        "(gained \(change), \(hitPoints - maxHitPoints) " +
+                        "beyond max!")
+                    printLastChange(characterName: charName)
+                    
+                    awaitingInput = false
+                }
             }
         }
         
@@ -133,33 +153,44 @@ class Characters {
             while awaitingInputA == true {
                 print("\(charName) has lost all hitpoints.")
                 print("[r]emove or [u]nconscious?")
-                var awaitingInputB: Bool = true
                 
-                while awaitingInputB == true {
-                    let input: String? = readLine()
+                let input: String? = readLine()
+                
+                if input == "r" {
+                    inBattle(trueFalse: false)
+                    awaitingInputA = false
                     
-                    if input == "r" {
-                        inBattle(trueFalse: false)
-                        
-                        //  if positive confirmation given in participant()
-                        if participating == false {
-                            awaitingInputA = false
-                        }
-                        awaitingInputB = false
-                        
-                    } else if input == "u" {
-                        print("\(charName) will be unconscious?  y/n")
-                        let confirmation = confirm()
-                        
-                        if confirmation == true {
-                            hitPoints = 0
-                            statuses.insert("Unconscious", at: 0)
-                            gameLog.append("\(charName) is unconscious!!")
-                            changeLog.append("\(charName) is unconscious!!")
-                            awaitingInputA = false
-                            awaitingInputB = false
-                        }
-                    }
+                } else if input == "u" {
+                    hitPoints = 0
+                    statuses.insert("Unconscious", at: 0)
+                    gameLog.append("\(charName) is unconscious!!")
+                    changeLog.append("\(charName) is unconscious!!")
+                    awaitingInputA = false
+                }
+                
+            }
+        }
+        
+        
+        func gainHP(change: Int) {
+            
+            //  HP change would bring character above max
+            if hitPoints + change > maxHitPoints {
+                hpCalcAboveMax(change: change)
+            
+            //  Normal HP gain
+            } else {
+                
+                print("\(charName)'s HP:  \(hitPoints) +\(abs(change)) " +
+                    "-->  \(Int(hitPoints + change))/\(maxHitPoints)?  y/n")
+                
+                if confirm() == true {
+                    hitPoints += change
+                    gameLog.append("\(charName) has gained \(abs(change)) " +
+                        "HP up to a total of \(hitPoints)/\(maxHitPoints)")
+                    changeLog.append("\(charName)'s HP:  \(hitPoints) " +
+                        "(gained \(change))")
+                    printLastChange(characterName: charName)
                 }
             }
         }
@@ -171,17 +202,22 @@ class Characters {
             
             if confirm() == true {
                 hitPoints += change
+                
+                //  Normal HP loss
                 if hitPoints > 0 {
                     gameLog.append("\(charName) has lost \(abs(change)) " +
                         "HP down to a total of [\(hitPoints)]!")
                     changeLog.append("\(charName)'s HP: [\(hitPoints)] " +
                         "(lost \(abs(change))")
+                    
+                //  HP loss brings character to 0 or below
                 } else {
                     zeroOrBelowHP()
                 }
             }
         }
-
+        
+        
         if mod > 0 {
             gainHP(change: mod)
             

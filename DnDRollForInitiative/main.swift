@@ -45,7 +45,9 @@ func inputToCommands(input: String) {
     case "New":
         new(command: commands)
     case "D":
-        displayCurrentTurn()
+        displayCharacterList(orderList: currentOrder, showTurns: true)
+    case "Chars":
+        displayCharacterList(orderList: charsOrdered, showTurns: false)
     case "Next":
         next()
     case "Game":

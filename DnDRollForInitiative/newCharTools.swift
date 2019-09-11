@@ -36,7 +36,7 @@ func inputDex(char: String) -> Int {
     while awaitingDex == true {
         print("What is \(char)'s dexterity:")
         let dexInput = inputInt()
-        print("\(char)'s Dex [\(dexInput)] ok?  y/n")
+        print("\(char)'s Dex \(dexInput)?  y/n")
         if confirm() == true {
             awaitingDex = false
             return dexInput
@@ -93,6 +93,13 @@ func sameDexCheck(initCharList: [Characters], testDex: Int) -> [Characters] {
 }
 
 
+func showCharEntered(name: String) {
+    displayCharacterList(orderList: charsOrdered, showTurns: false)
+    let index: Int = findCharInArray(characterName: name)
+    charInfo(charIndex: index)
+}
+
+
 func sameDexInsert(sameDexCharList: [Characters], newName: String, newInit: Int, newHP:
     Int, newMaxHP: Int, newAC: Int, newDex: Int) {
     
@@ -124,7 +131,7 @@ func sameDexInsert(sameDexCharList: [Characters], newName: String, newInit: Int,
         if orderInput >= firstIndex && orderInput <= lastIndex + 1{
             charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: orderInput)
             charsOrdered[orderInput].dexterity = newDex
-            printLastChange(characterName: newName)
+            showCharEntered(name: newName)
             inputAccepted = true
         }
     }
@@ -143,14 +150,14 @@ func sameInitInsert(sameInitCharList: [Characters], newName: String, newInit: In
             
             charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos)
             charsOrdered[turnPos].dexterity = newDex
-            printLastChange(characterName: newName)
+            showCharEntered(name: newName)
             return
         }
     }
     
     charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos + 1)
     charsOrdered[turnPos].dexterity = newDex
-    printLastChange(characterName: newName)
+    showCharEntered(name: newName)
     
 }
 
@@ -166,11 +173,11 @@ func rollForInitiative(newName: String, newInit: Int, newHP:
             turnPos = charsOrdered[i].order!
             
             charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos)
-            printLastChange(characterName: newName)
+            showCharEntered(name: newName)
             return
         }
     }
     
     charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos + 1)
-    printLastChange(characterName: newName)
+    showCharEntered(name: newName)
 }

@@ -24,6 +24,7 @@ func help() {
         birbman log                 |  shows history of Birbman's actions
         next                        |  next turn
         d                           |  re-displays current turn and info
+        chars                       |  displays list of all entered characters
         game                        |  print game summary
         exit                        |  exit
         """)
@@ -71,12 +72,11 @@ func new(command: [String]) {
         return
     }
     
-    let namePad = charName.padding(toLength: 16, withPad: " ", startingAt: 0)
+    let initStat: String = "Init " + String(initiative)
     let hpStat: String = "HP " + String(hp) + "/" + String(maximumHP)
-    let hpPad: String = hpStat.padding(toLength: 12, withPad: " ", startingAt: 0)
     let acStat: String = "AC " + String(ac)
     
-    print("\(namePad)\(hpPad)\(acStat)\nIs this ok?  y/n")
+    print("\(charName)   \(initStat)   \(hpStat)   \(acStat)\nIs this ok?  y/n")
     
     if confirm() == false {
         print("New character cancelled")
@@ -125,7 +125,7 @@ func new(command: [String]) {
         //  Insert first character
         charsOrdered.append(Characters(name: charName,ini: initiative,
                                        HP: hp, maxHP: maximumHP, AC: ac))
-        printLastChange(characterName: charName)
+        showCharEntered(name: charName)
     }
     
 }
@@ -176,7 +176,7 @@ func next() {
             availableCharFound = availabilityCheck()
         }
         
-        displayCurrentTurn()
+        displayCharacterList(orderList: currentOrder, showTurns: true)
         
     } else {
         print("No other available characters to change turn to")
@@ -218,8 +218,8 @@ func characterCommands(command: [String]) -> Void {
     */
     let characterName: String = command[0]
     let characterIndex: Int = findCharInArray(characterName: characterName)
-    var action: String = ""
-    var actionInput: String = ""
+    var firstInput: String = ""
+    var secondInput: String = ""
     
    
     //  If character not found, notify and exit
@@ -230,29 +230,22 @@ func characterCommands(command: [String]) -> Void {
     
     //  If there is a 3rd command, assign it as the action input
     //  If there are more, cancel the function and notify format is incorrect
-    if command.count < 2 {
-        print("Check format.  Should be like:\n" +
-            "    birbman hp -7 or birbman status bananas")
-        return
+    if command.count == 2 {
+        firstInput = command[1]
+        
+    } else if command.count == 3 {
+        firstInput = command[1]
+        secondInput = command[2]
+        
     } else {
-        action = command[1]
-    }
-    
-    if command.count > 2 {
-        actionInput = command[2]
-    } else if command.count > 3 {
         print("Check format.  Should be like:\n" +
-            "    birbman hp -7 or birbman status bananas")
-        return
+            "    birbman -7  |  birbman bananas  |  birbman remove bananas")
     }
+
     
-    switch action {
-    case "Hp":
-        charHp(charIndex: characterIndex, modifier: actionInput)
-    case "Status":
-        charsOrdered[characterIndex].addStatus(stat: actionInput)
+    switch firstInput {
     case "Remove":
-        charsOrdered[characterIndex].removeStatus(stat: actionInput)
+        charsOrdered[characterIndex].removeStatus(stat: secondInput)
     case "Out":
         charsOrdered[characterIndex].inBattle(trueFalse: false)
     case "In":
@@ -262,17 +255,23 @@ func characterCommands(command: [String]) -> Void {
     case "Log":
         charLog(charIndex: characterIndex)
     default:
-        /*
-          - command.count == 2
-         
-         Mod HP:
-          - command[1] can be converted to integer, else add status
-         
-         Add status:
-          - command[1] cannot be converted to integer
-         */
-        return
+        
+        if command.count == 2 {
+            
+            //  If only a number after charName, identified as HP change
+            if let commandInt: Int = Int(command[1]) {
+                charsOrdered[characterIndex].modHitPoints(mod: commandInt)
+                displayCharacterList(orderList: currentOrder, showTurns: true)
+                
+            //  If only single word after charName, identified as status to add
+            } else {
+                let commandStr: String = String(command[1])
+                charsOrdered[characterIndex].addStatus(stat: commandStr)
+            }
+        } else {
+            print("Check format.  Should be like:\n" +
+                "    birbman -7  |  birbman bananas  |  birbman remove bananas")
+        }
     }
-    
     
 }

@@ -105,7 +105,7 @@ func extractInputs(input: String, identifier: String) -> String {
 
 
 //  Display the current turn and information
-func displayCurrentTurn() {
+func displayCharacterList(orderList: [Characters], showTurns: Bool) {
     /*
          Frog            HP 21/21    AC 7    ["Status", "Status"]
      CAT                 HP 21/21    AC 13
@@ -132,51 +132,68 @@ func displayCurrentTurn() {
     print("--------------------------------------------------")
     
     
-    for i in 0..<currentOrder.count {
-        let charName: String = currentOrder[i].charName
+    for i in 0..<orderList.count {
+        let charName: String = orderList[i].charName
         let namePad = charName.padding(toLength: 16, withPad: " ", startingAt: 0)
         
-        let hpRaw: String = String(currentOrder[i].hitPoints)
-        let maxHPRaw: String = String(currentOrder[i].maxHitPoints)
+        let hpRaw: String = String(orderList[i].hitPoints)
+        let maxHPRaw: String = String(orderList[i].maxHitPoints)
         let hpStat: String = "HP " + hpRaw + "/" + maxHPRaw
         let hpPad: String = hpStat.padding(toLength: 12, withPad: " ", startingAt: 0)
         
-        let acRaw: String = String(currentOrder[i].armorClass)
+        let acRaw: String = String(orderList[i].armorClass)
         let acStat: String = "AC " + acRaw
         let acPad: String = acStat.padding(toLength: 9, withPad: " ", startingAt: 0)
         
         
-        //  Is in battle and is current turn
-        if i == turn {
-            let namePadTurn: String = charName.padding(toLength: 20,
-                                                       withPad: " ",
-                                                       startingAt: 0)
-            if currentOrder[i].statuses.count > 0 {
-                print("\(namePadTurn)\(hpPad)\(acPad)" +
-                    "\(currentOrder[i].statuses)")
+        func standardDisplay() {
+            if orderList[i].statuses.count > 0 {
+                print("    " + "\(namePad)\(hpPad)\(acPad)" +
+                    "\(orderList[i].statuses)")
             } else {
-                print("\(namePadTurn)\(hpPad)\(acPad)")
+                print("    " + "\(namePad)\(hpPad)\(acPad)")
             }
-            
-        } else {
-            //  In battle and not in turn
-            if currentOrder[i].participating == true {
-                
-                if currentOrder[i].statuses.count > 0 {
-                    print("    " + "\(namePad)\(hpPad)\(acPad)" +
-                        "\(currentOrder[i].statuses)")
+        }
+        
+        
+        func turnDisplay() {
+            //  Is in battle and is current turn
+            if i == turn {
+                let namePadTurn: String = charName.padding(toLength: 20,
+                                                           withPad: " ",
+                                                           startingAt: 0)
+                if orderList[i].statuses.count > 0 {
+                    print("\(namePadTurn)\(hpPad)\(acPad)" +
+                        "\(orderList[i].statuses)")
                 } else {
-                    print("    " + "\(namePad)\(hpPad)\(acPad)")
+                    print("\(namePadTurn)\(hpPad)\(acPad)")
                 }
                 
             } else {
-                //  Is not in battle and not in turn
-                print("    " + "\(charName)")
+                //  In battle and not in turn
+                if orderList[i].participating == true {
+                    standardDisplay()
+                    
+                } else {
+                    //  Is not in battle and not in turn
+                    print("    " + "\(charName)")
+                }
+                
             }
-            
+            //  characters out of battle will never be in turn due to
+            //  conditions of next() function
         }
-        //  characters out of battle will never be in turn due to
-        //  conditions of next() function
+        
+        
+        //  Game has started and want to show turns and related info
+        if showTurns == true {
+            turnDisplay()
+            
+        //  Just list all entered characters
+        } else {
+            standardDisplay()
+        }
+        
     }
     print("--------------------------------------------------")
 }
