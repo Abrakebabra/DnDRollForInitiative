@@ -9,6 +9,50 @@
 import Foundation
 
 
+//  Detect the start index 4 stat inputs and whether they are valid integers
+func detectStats(cmds: [String]) -> Int {
+    
+    if cmds.count < 6 {
+        return -1
+    }
+    
+    let indexIN: Int = cmds.endIndex - 4
+    let indexHP: Int = cmds.endIndex - 3
+    let indexHPMax: Int = cmds.endIndex - 2
+    let indexAC: Int = cmds.endIndex - 1
+    
+    if Int(cmds[indexIN]) != nil &&
+        Int(cmds[indexHP]) != nil &&
+        Int(cmds[indexHPMax]) != nil &&
+        Int(cmds[indexAC]) != nil {
+        
+        //  Returns the start of where the stats start
+        return indexIN
+        
+    } else {
+            return -1
+    }
+}
+
+
+func concatName(array cmds: [String], until stats: Int) -> String {
+    var nameConcat: String = ""
+    
+    //  format:  new birbman IN HP MAX AC, so 1 is start of name
+    for i in 1..<stats {
+        if i == 1 {
+            nameConcat += cmds[i]
+            
+        } else {
+            nameConcat += " \(cmds[i])"
+        }
+    }
+    
+    return nameConcat
+}
+
+
+
 func sameNameCheck(check: String) -> Bool {
     
     for charObj in charsOrdered {

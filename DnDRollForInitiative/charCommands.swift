@@ -66,6 +66,37 @@ func characterCommands(command: [String]) -> Void {
      birbman info                | shows all Birbman's info
      birbman log                 | shows history of Birbman's actions
      */
+    
+    // condition check if command is at least 2 or 3 depending check this and how to do it
+    var lastCmd: String = ""
+    var secondLastCmd: String = ""
+    
+    
+    if command.count > 2 {
+        lastCmd = command[command.endIndex - 1]
+        secondLastCmd = command[command.endIndex - 2]
+        
+        if secondLastCmd == "Remove" {
+            //  Concat eveything before remove, and use those as 3 elements
+        } else {
+            //  concat everything before last
+        }
+    
+    } else if command.count > 1 {
+        lastCmd = command[command.endIndex - 1]
+        //  end after assigning this and use it
+        
+    } else {
+        print("Check format.  Should be like:\n" +
+            "    birbman -7  |  birbman bananas  |  birbman remove bananas")
+        return
+    }
+    
+    
+    
+    
+    
+    
     let cmds = command
     let characterName: String = cmds[0]
     let characterIndex: Int = findCharInArray(characterName: characterName)

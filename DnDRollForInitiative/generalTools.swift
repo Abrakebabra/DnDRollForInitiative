@@ -110,6 +110,19 @@ func extractInputs(input: String, identifier: String) -> String {
 }
 
 
+func longestName() -> Int {
+    var longestNameLength: Int = 0
+    
+    for i in 0..<charsOrdered.count {
+        if charsOrdered[i].charName.count > longestNameLength {
+            longestNameLength = charsOrdered[i].charName.count
+        }
+    }
+    
+    return longestNameLength
+}
+
+
 //  Display the current turn and information
 func displayCharacterList(orderList: [Characters], showTurns: Bool) {
     /*
@@ -135,12 +148,22 @@ func displayCharacterList(orderList: [Characters], showTurns: Bool) {
       - 4 spaces to left
      
     */
+    
+    let longestCharCount: Int = longestName()
+    
+    var padLength: Int = 16
+    
+    if longestCharCount > padLength {
+        padLength = longestCharCount + 4
+    }
+    
+    
     print("--------------------------------------------------")
     
     
     for i in 0..<orderList.count {
         let charName: String = orderList[i].charName
-        let namePad = charName.padding(toLength: 16, withPad: " ", startingAt: 0)
+        let namePad = charName.padding(toLength: padLength, withPad: " ", startingAt: 0)
         
         let hpRaw: String = String(orderList[i].hitPoints)
         let maxHPRaw: String = String(orderList[i].maxHitPoints)
@@ -165,7 +188,7 @@ func displayCharacterList(orderList: [Characters], showTurns: Bool) {
         func turnDisplay() {
             //  Is in battle and is current turn
             if i == turn {
-                let namePadTurn: String = charName.padding(toLength: 20,
+                let namePadTurn: String = charName.padding(toLength: padLength + 4,
                                                            withPad: " ",
                                                            startingAt: 0)
                 if orderList[i].statuses.count > 0 {

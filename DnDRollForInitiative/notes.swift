@@ -28,7 +28,7 @@
 
  
  KNOWN BUGS:
- - Currently all fixed
+ - for characters with spaces, if entering character commands, can't find the character now after entering name because it needs to detect spaces
  
  
  TO MODIFY:
@@ -59,9 +59,8 @@
  
  - For other text fields like entering dex or y / n, make it so that accidental white spaces are cleaned up?
  
- - New character:  Allow spaces in names?  Think of how to detect this.
- Maybe once new command is detected, find the 4 stat inputs, and anything between new and the 4 stats, combine those into a single string and put a space between each element.
- What if spider 2 10 10 10 10 (spider #2 IN 10 HP 10/10 AC 10) is added?  How to distinguish between name iteration or stat?  Perhaps only last 4 numbers are stats?
+ 
+
  
  
  */

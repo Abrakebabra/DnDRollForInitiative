@@ -46,32 +46,59 @@ func new(command: [String]) {
         - command[5] can be turned into an integer
         - checks all conditions are met
         - shows confirmation of character stats
+     
+     Allows spaces in names.
+     banana rama 2 10 20 24 12 - Becomes [Banana Rama 2] [10] [20] [24] [12]
+     banana rama 2 10 20 24 - Becomes [Banana Rama] [2] [10] [20] [24]
+     banana rama 2 10 hp20/24 ac12 - Rejected
+     banana rama 2 10 20 - Rejected
     */
     
-    // Check that there are 6 commands
-    if command.count != 6 {
+    //  5 elements [concatName] [IN] [HP] [MAX] [AC]
+    let concatCmds: [String]
+    
+    //  Check that there are at least 6 inputs
+    //  Exit function if less
+    if command.count < 6 {
         print("Should be like: new birbman 9 28 28 13")
         return
+    
+    //  Check that the last 4 elements can be converted to integers
+    //  Return the index of the 4th to last element (Initiative stat)
+    //  Exit function if failed
+    } else {
+        let statStart: Int = detectStats(cmds: command)
+        
+        if statStart == -1 {
+            print("Should be like: new birbman 9 28 28 13")
+            return
+            
+        } else {
+            //  Concat all elements from first name element to stats
+            let nameConcat: String = concatName(array: command, until: statStart)
+            
+            concatCmds = [nameConcat, command[statStart], command[statStart + 1],
+            command[statStart + 2], command[statStart + 3]]
+        }
     }
     
-    let charName: String = command[1]
+    
+    let charName: String = concatCmds[0]
     
     if sameNameCheck(check: charName) == true {
         print("Same name already entered!")
         return
     }
     
-    guard let initiative: Int = Int(command[2]),
-        let hp: Int = Int(command[3]),
-        let maximumHP: Int = Int(command[4]),
-        let ac: Int = Int(command[5])
-        
-    else {
-        print("new [name] [initiative] [hp] [max] [ac]\n" +
-            "Command not recognized.\nShould be like: new birbman 9 28 28 13")
-        return
-    }
+    //  detectStats() already checks for validity
+    //  Exits function if fails checks  (statStart == -1)
+    let initiative: Int = Int(concatCmds[1])!
+    let hp: Int = Int(concatCmds[2])!
+    let maximumHP: Int = Int(concatCmds[3])!
+    let ac: Int = Int(concatCmds[4])!
     
+    
+    //  New character confirmation
     let initStat: String = "IN " + String(initiative)
     let hpStat: String = "HP " + String(hp) + "/" + String(maximumHP)
     let acStat: String = "AC " + String(ac)
