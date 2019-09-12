@@ -54,6 +54,12 @@ func inputInt() -> Int {
 }
 
 
+//  Can String be converted into an Int?
+func checkStringToInt(string: String) -> Bool {
+    return Int(string) != nil
+}
+
+
 //  Find where the character is in the array
 func findCharInArray(characterName: String) -> Int {
     for i in 0..<charsOrdered.count {

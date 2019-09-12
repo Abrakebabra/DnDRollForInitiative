@@ -72,11 +72,11 @@ func new(command: [String]) {
         return
     }
     
-    let initStat: String = "Init " + String(initiative)
+    let initStat: String = "IN " + String(initiative)
     let hpStat: String = "HP " + String(hp) + "/" + String(maximumHP)
     let acStat: String = "AC " + String(ac)
     
-    print("\(charName)   \(initStat)   \(hpStat)   \(acStat)\nIs this ok?  y/n")
+    print("\(charName)   \(initStat)   \(hpStat)   \(acStat)   OK?\ny / n")
     
     if confirm() == false {
         print("New character cancelled")
@@ -196,82 +196,9 @@ func game() {
 
 
 func exit() {
-    print("Are you sure you want to exit?  y/n")
+    print("Are you sure you want to exit?\ny / n")
     if confirm() == true {
         runProgram = false
         game()
     }
-}
-
-
-func characterCommands(command: [String]) -> Void {
-    /*
-     Commands:
-     birbman 8                   | adds 8 HP
-     birbman -7                  | removes 7 HP
-     birbman [status]            | adds [status]
-     birbman remove [status]     | removes [status]
-     birbman out                 | Birbman leaves battle order
-     birbman in                  | Birbman returns to battle order
-     birbman info                | shows all Birbman's info
-     birbman log                 | shows history of Birbman's actions
-    */
-    let characterName: String = command[0]
-    let characterIndex: Int = findCharInArray(characterName: characterName)
-    var firstInput: String = ""
-    var secondInput: String = ""
-    
-   
-    //  If character not found, notify and exit
-    if characterIndex == -1 {
-        print("Character not found!")
-        return
-    }
-    
-    //  If there is a 3rd command, assign it as the action input
-    //  If there are more, cancel the function and notify format is incorrect
-    if command.count == 2 {
-        firstInput = command[1]
-        
-    } else if command.count == 3 {
-        firstInput = command[1]
-        secondInput = command[2]
-        
-    } else {
-        print("Check format.  Should be like:\n" +
-            "    birbman -7  |  birbman bananas  |  birbman remove bananas")
-    }
-
-    
-    switch firstInput {
-    case "Remove":
-        charsOrdered[characterIndex].removeStatus(stat: secondInput)
-    case "Out":
-        charsOrdered[characterIndex].inBattle(trueFalse: false)
-    case "In":
-        charsOrdered[characterIndex].inBattle(trueFalse: true)
-    case "Info":
-        charInfo(charIndex: characterIndex)
-    case "Log":
-        charLog(charIndex: characterIndex)
-    default:
-        
-        if command.count == 2 {
-            
-            //  If only a number after charName, identified as HP change
-            if let commandInt: Int = Int(command[1]) {
-                charsOrdered[characterIndex].modHitPoints(mod: commandInt)
-                displayCharacterList(orderList: currentOrder, showTurns: true)
-                
-            //  If only single word after charName, identified as status to add
-            } else {
-                let commandStr: String = String(command[1])
-                charsOrdered[characterIndex].addStatus(stat: commandStr)
-            }
-        } else {
-            print("Check format.  Should be like:\n" +
-                "    birbman -7  |  birbman bananas  |  birbman remove bananas")
-        }
-    }
-    
 }

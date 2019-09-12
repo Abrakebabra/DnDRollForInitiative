@@ -36,7 +36,7 @@ class Characters {
     
     
     func sameInitiative(dex: Int) {
-        print("Dexterity of [\(dex)] for \(charName)?  y/n")
+        print("Dexterity of [\(dex)] for \(charName)?\ny / n")
         
         if confirm() == true {
             dexterity = dex
@@ -46,7 +46,7 @@ class Characters {
     
     
     func addStatus(stat: String) {
-        print("\(charName):  Add status effect [\(stat)]?  y/n")
+        print("\(charName):  Add status effect [\(stat)]?\ny / n")
         
         if confirm() == true {
             statuses.append(stat)
@@ -181,24 +181,21 @@ class Characters {
             //  Normal HP gain
             } else {
                 
-                print("\(charName)'s HP:  \(hitPoints) +\(abs(change)) " +
-                    "-->  \(Int(hitPoints + change))/\(maxHitPoints)?  y/n")
+                print("\(charName) +\(abs(change)) hit points?\ny / n")
                 
                 if confirm() == true {
                     hitPoints += change
                     gameLog.append("\(charName) has gained \(abs(change)) " +
                         "HP up to a total of \(hitPoints)/\(maxHitPoints)")
-                    changeLog.append("\(charName)'s HP:  \(hitPoints) " +
+                    changeLog.append("\(charName)'s HP \(hitPoints) " +
                         "(gained \(change))")
-                    printLastChange(characterName: charName)
                 }
             }
         }
         
         
         func loseHP(change: Int) {
-            print("\(charName)'s HP: \(hitPoints) -\(abs(change)) " +
-                "-> [\(Int(hitPoints + change))]?  y/n")
+            print("\(charName) -\(abs(change)) hit points?\ny / n")
             
             if confirm() == true {
                 hitPoints += change
@@ -206,8 +203,8 @@ class Characters {
                 //  Normal HP loss
                 if hitPoints > 0 {
                     gameLog.append("\(charName) has lost \(abs(change)) " +
-                        "HP down to a total of [\(hitPoints)]!")
-                    changeLog.append("\(charName)'s HP: [\(hitPoints)] " +
+                        "HP down to a total of \(hitPoints)/\(maxHitPoints)!")
+                    changeLog.append("\(charName)'s HP \(hitPoints) " +
                         "(lost \(abs(change))")
                     
                 //  HP loss brings character to 0 or below

@@ -36,14 +36,26 @@ func inputToCommands(input: String) {
      */
     let inputCap: String = input.capitalized
     let commands: [String] = inputCap.components(separatedBy: " ")
+    var commandsCleaned: [String] = []
     
+    //  Cleans up any accidental spaces to be much more forgiving
+    for i in commands {
+        if i != "" {
+            commandsCleaned.append(i)
+        }
+    }
+    
+    //  If only spaces entered, exits the function
+    if commandsCleaned.count < 1 {
+        return
+    }
     
     //  add option for multiple enemies of the same kind with varying hp
-    switch commands[0] {
+    switch commandsCleaned[0] {
     case "Help":
         help()
     case "New":
-        new(command: commands)
+        new(command: commandsCleaned)
     case "D":
         displayCharacterList(orderList: currentOrder, showTurns: true)
     case "Chars":
@@ -56,7 +68,7 @@ func inputToCommands(input: String) {
         exit()
     default:
         // find character
-        characterCommands(command: commands)
+        characterCommands(command: commandsCleaned)
     }
     
 }

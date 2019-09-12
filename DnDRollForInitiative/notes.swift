@@ -28,7 +28,7 @@
 
  
  KNOWN BUGS:
-
+ - Currently all fixed
  
  
  TO MODIFY:
@@ -37,11 +37,10 @@
  - Way to permanently delete a character out of the charOrdered list if a mistake has been made
  
  Modified Mechanics:
- HP
 
  - option to delete a character entirely if mistakes are made?
  - or option to modify its stats directly?
- 
+ - If character has 0 HP and is unconscious and has HP added, remove unconscious status
  
  Confirmation
  - If y/n for confirmation not entered, needs to re-show the confirmation prompt
@@ -52,11 +51,17 @@
  when a character goes to 0 hp, only the status unconscious is recorded and not
  the losing of the hp to that stage
  
+ when a character goes to 0 hp, give extra option to remove and hide from turn screen.
  
- - if remove status with whitespace after, doesn't recognise.
+ give extra option to hide any character from turn screen?
+ Or....  Once removed, hidden from turn screen anyway since the char list can be seen at any time
  
- - adding and removing HP.  If name + 8 or name - 2 entered, doesn't work.
  
-
+ - For other text fields like entering dex or y / n, make it so that accidental white spaces are cleaned up?
+ 
+ - New character:  Allow spaces in names?  Think of how to detect this.
+ Maybe once new command is detected, find the 4 stat inputs, and anything between new and the 4 stats, combine those into a single string and put a space between each element.
+ What if spider 2 10 10 10 10 (spider #2 IN 10 HP 10/10 AC 10) is added?  How to distinguish between name iteration or stat?  Perhaps only last 4 numbers are stats?
+ 
  
  */

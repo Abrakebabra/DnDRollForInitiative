@@ -36,7 +36,7 @@ func inputDex(char: String) -> Int {
     while awaitingDex == true {
         print("What is \(char)'s dexterity:")
         let dexInput = inputInt()
-        print("\(char)'s Dex \(dexInput)?  y/n")
+        print("\(char)'s Dex \(dexInput)?\ny / n")
         if confirm() == true {
             awaitingDex = false
             return dexInput
