@@ -57,14 +57,15 @@ func charLog(charIndex: Int) {
 func characterCommands(command: [String]) -> Void {
     /*
      Commands:
-     birbman 8                   | adds 8 HP
+     birbman                     | shows all Birbman's info
+     birbman +8                  | adds 8 HP
      birbman -7                  | removes 7 HP
      birbman [status]            | adds [status]
      birbman remove [status]     | removes [status]
      birbman out                 | Birbman leaves battle order
      birbman in                  | Birbman returns to battle order
-     birbman info                | shows all Birbman's info
      birbman log                 | shows history of Birbman's actions
+     birbman delete              | permanently delete Birbman
      */
     
     var characterName: String = ""
@@ -81,7 +82,7 @@ func characterCommands(command: [String]) -> Void {
     
     if command.count < 2 {
         characterName = command[0]
-        let characterIndex: Int = findCharInArray(characterName: characterName)
+        let characterIndex: Int = findCharInArray(array: charsOrdered, characterName: characterName)
         if characterIndex == -1 {
             print("\(characterName) not found!")
             return
@@ -93,7 +94,7 @@ func characterCommands(command: [String]) -> Void {
     
     if cmdLast == "Log" {
         characterName = concatName(array: command, from: 0, until: cmdLastElementIndex)
-        let characterIndex: Int = findCharInArray(characterName: characterName)
+        let characterIndex: Int = findCharInArray(array: charsOrdered, characterName: characterName)
         if characterIndex == -1 {
             print("\(characterName) not found!")
             return
@@ -103,7 +104,7 @@ func characterCommands(command: [String]) -> Void {
         
     } else if cmdLast == "In" {
         characterName = concatName(array: command, from: 0, until: cmdLastElementIndex)
-        let characterIndex: Int = findCharInArray(characterName: characterName)
+        let characterIndex: Int = findCharInArray(array: charsOrdered, characterName: characterName)
         if characterIndex == -1 {
             print("\(characterName) not found!")
             return
@@ -113,13 +114,51 @@ func characterCommands(command: [String]) -> Void {
         
     } else if cmdLast == "Out" {
         characterName = concatName(array: command, from: 0, until: cmdLastElementIndex)
-        let characterIndex: Int = findCharInArray(characterName: characterName)
+        let characterIndex: Int = findCharInArray(array: charsOrdered, characterName: characterName)
         if characterIndex == -1 {
             print("\(characterName) not found!")
             return
         }
         charsOrdered[characterIndex].inBattle(trueFalse: false)
         return
+        
+    } else if cmdLast == "Delete" {
+        characterName = concatName(array: command, from: 0, until: cmdLastElementIndex)
+        let charsOrderedIndex: Int = findCharInArray(array: charsOrdered, characterName: characterName)
+        let charsCurrentIndex: Int = findCharInArray(array: currentOrder, characterName: characterName)
+        
+        if charsOrderedIndex == -1 || charsCurrentIndex == -1{
+            print("\(characterName) not found!")
+            return
+        }
+        
+        print("PERMANENTLY DELETE \(characterName.uppercased())?\ny / n")
+        
+        if confirm() == true {
+            let currentTurn: String = currentOrder[turn].charName
+            
+            
+            
+            currentOrder.remove(at: charsCurrentIndex)
+            charsOrdered.remove(at: charsOrderedIndex)
+            
+            if currentTurn == characterName {
+                turn -= 1
+                
+                if turn < 0 {
+                    turn = currentOrder.count - 1
+                }
+                return
+            }
+            
+            for i in 0..<currentOrder.count {
+                if currentTurn == currentOrder[i].charName {
+                    turn = i
+                    break
+                }
+            }
+            return
+        }
     }
     
     
@@ -131,7 +170,7 @@ func characterCommands(command: [String]) -> Void {
         
         if subString == "+" || subString == "-" {
             characterName = concatName(array: command, from: 0, until: cmdLastElementIndex)
-            let characterIndex: Int = findCharInArray(characterName: characterName)
+            let characterIndex: Int = findCharInArray(array: charsOrdered, characterName: characterName)
             if characterIndex == -1 {
                 print("\(characterName) not found!")
                 return
@@ -143,7 +182,7 @@ func characterCommands(command: [String]) -> Void {
         
         if command.count < 3 {
             characterName = concatName(array: command, from: 0, until: command.endIndex)
-            let characterIndex: Int = findCharInArray(characterName: characterName)
+            let characterIndex: Int = findCharInArray(array: charsOrdered, characterName: characterName)
             if characterIndex == -1 {
                 print("\(characterName) not found!")
                 return
@@ -159,7 +198,7 @@ func characterCommands(command: [String]) -> Void {
             characterName = concatName(array: command, from: 0, until: cmdSecondLastElementIndex)
             cmdLast = cmdSecondLast + cmdLast
             if let cmdLastConcatInt: Int = Int(cmdLast) {
-                let characterIndex: Int = findCharInArray(characterName: characterName)
+                let characterIndex: Int = findCharInArray(array: charsOrdered, characterName: characterName)
                 if characterIndex == -1 {
                     print("\(characterName) not found!")
                     return
@@ -170,7 +209,7 @@ func characterCommands(command: [String]) -> Void {
             
         } else {
             characterName = concatName(array: command, from: 0, until: command.endIndex)
-            let characterIndex = findCharInArray(characterName: characterName)
+            let characterIndex = findCharInArray(array: charsOrdered, characterName: characterName)
             if characterIndex == -1 {
                 print("\(characterName) not found!")
                 return
@@ -183,7 +222,7 @@ func characterCommands(command: [String]) -> Void {
     
     if command.count < 3 {
         characterName = concatName(array: command, from: 0, until: command.endIndex)
-        var characterIndex: Int = findCharInArray(characterName: characterName)
+        var characterIndex: Int = findCharInArray(array: charsOrdered, characterName: characterName)
         
         
         if characterIndex != -1 {
@@ -192,7 +231,7 @@ func characterCommands(command: [String]) -> Void {
             
         } else {
             characterName = concatName(array: command, from: 0, until: cmdLastElementIndex)
-            characterIndex = findCharInArray(characterName: characterName)
+            characterIndex = findCharInArray(array: charsOrdered, characterName: characterName)
             if characterIndex == -1 {
                 print("\(characterName) not found!")
                 return
@@ -208,7 +247,7 @@ func characterCommands(command: [String]) -> Void {
     
     if cmdSecondLast == "Remove" {
         characterName = concatName(array: command, from: 0, until: cmdSecondLastElementIndex)
-        let characterIndex = findCharInArray(characterName: characterName)
+        let characterIndex = findCharInArray(array: charsOrdered, characterName: characterName)
         if characterIndex == -1 {
             print("\(characterName) not found!")
             return
@@ -219,7 +258,7 @@ func characterCommands(command: [String]) -> Void {
     
     
     characterName = concatName(array: command, from: 0, until: command.endIndex)
-    var characterIndex: Int = findCharInArray(characterName: characterName)
+    var characterIndex: Int = findCharInArray(array: charsOrdered, characterName: characterName)
     
     if characterIndex != -1 {
         charInfo(charIndex: characterIndex)
@@ -227,7 +266,7 @@ func characterCommands(command: [String]) -> Void {
         
     } else {
         characterName = concatName(array: command, from: 0, until: cmdLastElementIndex)
-        characterIndex = findCharInArray(characterName: characterName)
+        characterIndex = findCharInArray(array: charsOrdered, characterName: characterName)
         if characterIndex == -1 {
             print("\(characterName) not found!")
             return

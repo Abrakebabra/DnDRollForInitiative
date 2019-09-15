@@ -33,6 +33,8 @@ func confirm() -> Bool {
         } else if input == "n" {
             awaitingInput = false
             return false
+        } else {
+            print("y / n")
         }
     }
 }
@@ -61,9 +63,9 @@ func checkStringToInt(string: String) -> Bool {
 
 
 //  Find where the character is in the array
-func findCharInArray(characterName: String) -> Int {
-    for i in 0..<charsOrdered.count {
-        if charsOrdered[i].charName == characterName {
+func findCharInArray(array: [Characters], characterName: String) -> Int {
+    for i in 0..<array.count {
+        if array[i].charName == characterName {
             return i
         }
     }
@@ -73,7 +75,7 @@ func findCharInArray(characterName: String) -> Int {
 
 //  Print the last entry in the character's changeLog
 func printLastChange(characterName: String) {
-    let charIndex: Int = findCharInArray(characterName: characterName)
+    let charIndex: Int = findCharInArray(array: charsOrdered, characterName: characterName)
     
     if charIndex == -1 {
         return
@@ -219,12 +221,8 @@ func displayCharacterList(orderList: [Characters], showTurns: Bool) {
                 //  In battle and not in turn
                 if orderList[i].participating == true {
                     standardDisplay()
-                    
-                } else {
-                    //  Is not in battle and not in turn
-                    print("    " + "\(charName)")
                 }
-                
+                //  Removed: Is not in battle and not in turn
             }
             //  characters out of battle will never be in turn due to
             //  conditions of next() function

@@ -66,7 +66,7 @@ class Characters {
         }
         
         //  No need for confirmation of removal.  Hard to accidentally do this.
-        self.statuses.remove(at: index)
+        statuses.remove(at: index)
         gameLog.append("\(charName) no longer has status effect " +
             "[\(stat)]!")
         changeLog.append("\(charName) no longer has status effect " +
@@ -115,23 +115,32 @@ class Characters {
             while awaitingInput == true {
                 print("\(charName)'s HP will go beyond max HP " +
                     "(\(hitPoints + change)/\(maxHitPoints))\n" +
-                    "[m]ax or [b]eyond?")
+                    "[m]ax, [b]eyond, [c]ancel?")
                 let input: String? = readLine()
                 
                 //  Set hp to max hit points
                 if input == "m" {
+                    if hitPoints == 0 {
+                        removeStatus(stat: "Unconscious")
+                    }
+                    
+                    let currentHP: Int = hitPoints
                     hitPoints = maxHitPoints
                     
                     gameLog.append("\(charName) has gained " +
                         "\(maxHitPoints - hitPoints) " +
                         "HP up to a total of \(hitPoints)/\(maxHitPoints)")
                     changeLog.append("\(charName)'s HP:  \(hitPoints) " +
-                        "(gained \(maxHitPoints - hitPoints))")
+                        "(gained \(maxHitPoints - currentHP))")
                     printLastChange(characterName: charName)
                     awaitingInput = false
                     
                     //  Let hp go beyond max hit points
                 } else if input == "b" {
+                    if hitPoints == 0 {
+                        removeStatus(stat: "Unconscious")
+                    }
+                    
                     hitPoints += change
                     
                     gameLog.append("\(charName) has gained \(abs(change)) " +
@@ -142,6 +151,10 @@ class Characters {
                     printLastChange(characterName: charName)
                     
                     awaitingInput = false
+                    
+                } else if input == "c" {
+                    print("Cancelled")
+                    return
                 }
             }
         }
@@ -152,7 +165,7 @@ class Characters {
             
             while awaitingInputA == true {
                 print("\(charName) has lost all hitpoints.")
-                print("[r]emove or [u]nconscious?")
+                print("[r]emove, [u]nconscious?")
                 
                 let input: String? = readLine()
                 
@@ -173,7 +186,6 @@ class Characters {
         
         
         func gainHP(change: Int) {
-            
             //  HP change would bring character above max
             if hitPoints + change > maxHitPoints {
                 hpCalcAboveMax(change: change)
@@ -184,6 +196,10 @@ class Characters {
                 print("\(charName) +\(abs(change)) hit points?\ny / n")
                 
                 if confirm() == true {
+                    if hitPoints == 0 {
+                        removeStatus(stat: "Unconscious")
+                    }
+                    
                     hitPoints += change
                     gameLog.append("\(charName) has gained \(abs(change)) " +
                         "HP up to a total of \(hitPoints)/\(maxHitPoints)")
@@ -209,6 +225,10 @@ class Characters {
                     
                 //  HP loss brings character to 0 or below
                 } else {
+                    gameLog.append("\(charName) has lost \(abs(change)) " +
+                        "HP down to a total of \(hitPoints)/\(maxHitPoints)!")
+                    changeLog.append("\(charName)'s HP \(hitPoints) " +
+                        "(lost \(abs(change))")
                     zeroOrBelowHP()
                 }
             }

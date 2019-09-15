@@ -121,7 +121,7 @@ func sameDexCheck(initCharList: [Characters], testDex: Int) -> [Characters] {
 
 func showCharEntered(name: String) {
     displayCharacterList(orderList: charsOrdered, showTurns: false)
-    let index: Int = findCharInArray(characterName: name)
+    let index: Int = findCharInArray(array: charsOrdered, characterName: name)
     charInfo(charIndex: index)
 }
 

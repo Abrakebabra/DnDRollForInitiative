@@ -14,14 +14,17 @@ func help() {
     print(
         """
         new birbman 7 15 21 13      |  new [Name] [Initiative] [HP] [maxHP] [AC]
-        birbman 8                   |  adds 8 HP
+        (characters may have spaces, numbers and symbols)
+
+        birbman                     |  shows all Birbman's info
+        birbman +8                  |  adds 8 HP
         birbman -7                  |  removes 7 HP
         birbman [status]            |  adds [status]
         birbman remove [status]     |  removes [status]
         birbman out                 |  Birbman leaves battle order
         birbman in                  |  Birbman returns to battle order
-        birbman info                |  shows all Birbman's info
         birbman log                 |  shows history of Birbman's actions
+        birbman delete              |  permanently delete Birbman
         next                        |  next turn
         d                           |  re-displays current turn and info
         chars                       |  displays list of all entered characters
