@@ -75,7 +75,7 @@ func new(command: [String]) {
             
         } else {
             //  Concat all elements from first name element to stats
-            let nameConcat: String = concatName(array: command, until: statStart)
+            let nameConcat: String = concatName(array: command, from: 1, until: statStart)
             
             concatCmds = [nameConcat, command[statStart], command[statStart + 1],
             command[statStart + 2], command[statStart + 3]]

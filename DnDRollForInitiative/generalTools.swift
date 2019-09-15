@@ -123,6 +123,23 @@ func longestName() -> Int {
 }
 
 
+func concatName(array: [String], from: Int, until: Int) -> String {
+    var nameConcat: String = ""
+    
+    //  format:  new birbman IN HP MAX AC, so 1 is start of name
+    for i in from..<until {
+        if i == from {
+            nameConcat += array[i]
+            
+        } else {
+            nameConcat += " \(array[i])"
+        }
+    }
+    
+    return nameConcat
+}
+
+
 //  Display the current turn and information
 func displayCharacterList(orderList: [Characters], showTurns: Bool) {
     /*

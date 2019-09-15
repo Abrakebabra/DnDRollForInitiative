@@ -28,7 +28,7 @@
 
  
  KNOWN BUGS:
- - for characters with spaces, if entering character commands, can't find the character now after entering name because it needs to detect spaces
+ - If going beyond max HP, no option to cancel entirely.  Max, beyond, cancel
  
  
  TO MODIFY:

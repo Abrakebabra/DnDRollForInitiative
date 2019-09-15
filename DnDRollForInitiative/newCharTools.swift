@@ -35,24 +35,6 @@ func detectStats(cmds: [String]) -> Int {
 }
 
 
-func concatName(array cmds: [String], until stats: Int) -> String {
-    var nameConcat: String = ""
-    
-    //  format:  new birbman IN HP MAX AC, so 1 is start of name
-    for i in 1..<stats {
-        if i == 1 {
-            nameConcat += cmds[i]
-            
-        } else {
-            nameConcat += " \(cmds[i])"
-        }
-    }
-    
-    return nameConcat
-}
-
-
-
 func sameNameCheck(check: String) -> Bool {
     
     for charObj in charsOrdered {
@@ -197,6 +179,8 @@ func sameInitInsert(sameInitCharList: [Characters], newName: String, newInit: In
             showCharEntered(name: newName)
             return
         }
+        
+        turnPos = sameInitCharList[i].order!
     }
     
     charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos + 1)
@@ -220,6 +204,8 @@ func rollForInitiative(newName: String, newInit: Int, newHP:
             showCharEntered(name: newName)
             return
         }
+        
+        turnPos = charsOrdered[i].order!
     }
     
     charsOrdered.insert(Characters(name: newName, ini: newInit, HP: newHP, maxHP: newMaxHP, AC: newAC), at: turnPos + 1)

@@ -67,97 +67,173 @@ func characterCommands(command: [String]) -> Void {
      birbman log                 | shows history of Birbman's actions
      */
     
-    // condition check if command is at least 2 or 3 depending check this and how to do it
-    var lastCmd: String = ""
-    var secondLastCmd: String = ""
+    var characterName: String = ""
+    
+    if command.count < 1 {
+        print("No command identified")
+        return
+    }
     
     
-    if command.count > 2 {
-        lastCmd = command[command.endIndex - 1]
-        secondLastCmd = command[command.endIndex - 2]
-        
-        if secondLastCmd == "Remove" {
-            //  Concat eveything before remove, and use those as 3 elements
-        } else {
-            //  concat everything before last
+    let cmdLastElementIndex: Int = command.endIndex - 1
+    var cmdLast: String = command[cmdLastElementIndex]
+    
+    
+    if command.count < 2 {
+        characterName = command[0]
+        let characterIndex: Int = findCharInArray(characterName: characterName)
+        if characterIndex == -1 {
+            print("\(characterName) not found!")
+            return
         }
-    
-    } else if command.count > 1 {
-        lastCmd = command[command.endIndex - 1]
-        //  end after assigning this and use it
-        
-    } else {
-        print("Check format.  Should be like:\n" +
-            "    birbman -7  |  birbman bananas  |  birbman remove bananas")
-        return
-    }
-    
-    
-    
-    
-    
-    
-    let cmds = command
-    let characterName: String = cmds[0]
-    let characterIndex: Int = findCharInArray(characterName: characterName)
-    var firstInput: String = ""
-    var secondInput: String = ""
-    
-    
-    //  If character not found, notify and exit
-    if characterIndex == -1 {
-        print("Character not found!")
-        return
-    }
-    
-    //  If there is a 3rd command, assign it as the action input
-    //  If there are more, cancel the function and notify format is incorrect
-    if cmds.count == 2 {
-        firstInput = cmds[1]
-    
-    //  If the cmds[1] is + or - and cmds[2] is Int, user is trying to mod hp
-    } else if cmds.count == 3 {
-        firstInput = cmds[1]
-        secondInput = cmds[2]
-        
-        if firstInput == "+" || firstInput == "-" {
-            
-            if checkStringToInt(string: cmds[2]) == true {
-                firstInput = cmds[1] + cmds[2]
-            }
-        }
-    
-    //  If not 2 or 3 commands, format won't match input requirements
-    } else {
-        print("Check format.  Should be like:\n" +
-            "    birbman -7  |  birbman bananas  |  birbman remove bananas")
-        return
-    }
-    
-    
-    switch firstInput {
-    case "Remove":
-        charsOrdered[characterIndex].removeStatus(stat: secondInput)
-    case "Out":
-        charsOrdered[characterIndex].inBattle(trueFalse: false)
-    case "In":
-        charsOrdered[characterIndex].inBattle(trueFalse: true)
-    case "Info":
         charInfo(charIndex: characterIndex)
-    case "Log":
+        return
+    }
+   
+    
+    if cmdLast == "Log" {
+        characterName = concatName(array: command, from: 0, until: cmdLastElementIndex)
+        let characterIndex: Int = findCharInArray(characterName: characterName)
+        if characterIndex == -1 {
+            print("\(characterName) not found!")
+            return
+        }
         charLog(charIndex: characterIndex)
-    default:
+        return
         
-        //  If only a number after charName, identified as HP change
-        if let commandInt: Int = Int(firstInput) {
-            charsOrdered[characterIndex].modHitPoints(mod: commandInt)
+    } else if cmdLast == "In" {
+        characterName = concatName(array: command, from: 0, until: cmdLastElementIndex)
+        let characterIndex: Int = findCharInArray(characterName: characterName)
+        if characterIndex == -1 {
+            print("\(characterName) not found!")
+            return
+        }
+        charsOrdered[characterIndex].inBattle(trueFalse: true)
+        return
+        
+    } else if cmdLast == "Out" {
+        characterName = concatName(array: command, from: 0, until: cmdLastElementIndex)
+        let characterIndex: Int = findCharInArray(characterName: characterName)
+        if characterIndex == -1 {
+            print("\(characterName) not found!")
+            return
+        }
+        charsOrdered[characterIndex].inBattle(trueFalse: false)
+        return
+    }
+    
+    
+    if let cmdLastInt: Int = Int(cmdLast) {
+        let detectPlusMinus: String = cmdLast
+        let subIndexStart = detectPlusMinus.index(detectPlusMinus.startIndex, offsetBy: 0)
+        let subIndexEnd = detectPlusMinus.index(detectPlusMinus.startIndex, offsetBy: 1)
+        let subString = detectPlusMinus[subIndexStart..<subIndexEnd]
+        
+        if subString == "+" || subString == "-" {
+            characterName = concatName(array: command, from: 0, until: cmdLastElementIndex)
+            let characterIndex: Int = findCharInArray(characterName: characterName)
+            if characterIndex == -1 {
+                print("\(characterName) not found!")
+                return
+            }
+            charsOrdered[characterIndex].modHitPoints(mod: cmdLastInt)
             displayCharacterList(orderList: currentOrder, showTurns: true)
+            return
+        }
+        
+        if command.count < 3 {
+            characterName = concatName(array: command, from: 0, until: command.endIndex)
+            let characterIndex: Int = findCharInArray(characterName: characterName)
+            if characterIndex == -1 {
+                print("\(characterName) not found!")
+                return
+            }
+            charInfo(charIndex: characterIndex)
+            return
+        }
+        
+        let cmdSecondLastElementIndex: Int = command.endIndex - 2
+        let cmdSecondLast: String = command[cmdSecondLastElementIndex]
+        
+        if cmdSecondLast == "+" || cmdSecondLast == "-" {
+            characterName = concatName(array: command, from: 0, until: cmdSecondLastElementIndex)
+            cmdLast = cmdSecondLast + cmdLast
+            if let cmdLastConcatInt: Int = Int(cmdLast) {
+                let characterIndex: Int = findCharInArray(characterName: characterName)
+                if characterIndex == -1 {
+                    print("\(characterName) not found!")
+                    return
+                }
+                charsOrdered[characterIndex].modHitPoints(mod: Int(cmdLastConcatInt))
+            }
+            return
             
-            //  If only single word after charName, identified as status to add
         } else {
-            let commandStr: String = String(firstInput)
-            charsOrdered[characterIndex].addStatus(stat: commandStr)
+            characterName = concatName(array: command, from: 0, until: command.endIndex)
+            let characterIndex = findCharInArray(characterName: characterName)
+            if characterIndex == -1 {
+                print("\(characterName) not found!")
+                return
+            }
+            charInfo(charIndex: characterIndex)
+            return
         }
     }
     
+    
+    if command.count < 3 {
+        characterName = concatName(array: command, from: 0, until: command.endIndex)
+        var characterIndex: Int = findCharInArray(characterName: characterName)
+        
+        
+        if characterIndex != -1 {
+            charInfo(charIndex: characterIndex)
+            return
+            
+        } else {
+            characterName = concatName(array: command, from: 0, until: cmdLastElementIndex)
+            characterIndex = findCharInArray(characterName: characterName)
+            if characterIndex == -1 {
+                print("\(characterName) not found!")
+                return
+            }
+            charsOrdered[characterIndex].addStatus(stat: cmdLast)
+            return
+        }
+    }
+    
+    
+    let cmdSecondLastElementIndex: Int = command.endIndex - 2
+    let cmdSecondLast: String = command[cmdSecondLastElementIndex]
+    
+    if cmdSecondLast == "Remove" {
+        characterName = concatName(array: command, from: 0, until: cmdSecondLastElementIndex)
+        let characterIndex = findCharInArray(characterName: characterName)
+        if characterIndex == -1 {
+            print("\(characterName) not found!")
+            return
+        }
+        charsOrdered[characterIndex].removeStatus(stat: cmdLast)
+        return
+    }
+    
+    
+    characterName = concatName(array: command, from: 0, until: command.endIndex)
+    var characterIndex: Int = findCharInArray(characterName: characterName)
+    
+    if characterIndex != -1 {
+        charInfo(charIndex: characterIndex)
+        return
+        
+    } else {
+        characterName = concatName(array: command, from: 0, until: cmdLastElementIndex)
+        characterIndex = findCharInArray(characterName: characterName)
+        if characterIndex == -1 {
+            print("\(characterName) not found!")
+            return
+        }
+        charsOrdered[characterIndex].addStatus(stat: cmdLast)
+    }
+    
+
 }
