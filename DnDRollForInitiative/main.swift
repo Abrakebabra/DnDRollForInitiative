@@ -73,7 +73,7 @@ func inputToCommands(input: String) {
     
 }
 
-
+print("")
 help()
 
 while runProgram == true {

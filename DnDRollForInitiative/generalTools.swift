@@ -11,7 +11,7 @@ import Foundation
 /*
  GENERAL TOOLS:
   24.  Seek confirmation -> Bool
-  42.  Direct integer input -> Int
+  44.  Direct integer input -> Int
   58.  Find character in charOrdered array -> Int
   69.  Print character's last changeLog entry -> Void
   83.  Identify command prefix -> Bool                  (MAYBE GET RID OF THIS STEP)

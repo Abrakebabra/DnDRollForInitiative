@@ -29,15 +29,14 @@
  
  KNOWN BUGS:
  
- 
  TO MODIFY:
+  - Clean up character commands and group into functions
+    to more easily see condition logic
+ 
  
  New Mechanics:
  
  Modified Mechanics:
 
-
-
- 
  
  */

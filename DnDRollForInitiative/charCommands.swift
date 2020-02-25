@@ -110,6 +110,7 @@ func characterCommands(command: [String]) -> Void {
             return
         }
         charsOrdered[characterIndex].inBattle(trueFalse: true)
+        displayCharacterList(orderList: currentOrder, showTurns: true)
         return
         
     } else if cmdLast == "Out" {
@@ -120,6 +121,7 @@ func characterCommands(command: [String]) -> Void {
             return
         }
         charsOrdered[characterIndex].inBattle(trueFalse: false)
+        displayCharacterList(orderList: currentOrder, showTurns: true)
         return
         
     } else if cmdLast == "Delete" {
@@ -127,7 +129,7 @@ func characterCommands(command: [String]) -> Void {
         let charsOrderedIndex: Int = findCharInArray(array: charsOrdered, characterName: characterName)
         let charsCurrentIndex: Int = findCharInArray(array: currentOrder, characterName: characterName)
         
-        if charsOrderedIndex == -1 || charsCurrentIndex == -1{
+        if charsOrderedIndex == -1 {
             print("\(characterName) not found!")
             return
         }
@@ -138,8 +140,10 @@ func characterCommands(command: [String]) -> Void {
             let currentTurn: String = currentOrder[turn].charName
             
             
+            if charsCurrentIndex != -1 {
+                currentOrder.remove(at: charsCurrentIndex)
+            }
             
-            currentOrder.remove(at: charsCurrentIndex)
             charsOrdered.remove(at: charsOrderedIndex)
             
             if currentTurn == characterName {
@@ -148,6 +152,7 @@ func characterCommands(command: [String]) -> Void {
                 if turn < 0 {
                     turn = currentOrder.count - 1
                 }
+                displayCharacterList(orderList: charsOrdered, showTurns: true)
                 return
             }
             
@@ -157,6 +162,7 @@ func characterCommands(command: [String]) -> Void {
                     break
                 }
             }
+            displayCharacterList(orderList: currentOrder, showTurns: true)
             return
         }
     }
@@ -204,6 +210,7 @@ func characterCommands(command: [String]) -> Void {
                     return
                 }
                 charsOrdered[characterIndex].modHitPoints(mod: Int(cmdLastConcatInt))
+                displayCharacterList(orderList: currentOrder, showTurns: true)
             }
             return
             
@@ -237,6 +244,7 @@ func characterCommands(command: [String]) -> Void {
                 return
             }
             charsOrdered[characterIndex].addStatus(stat: cmdLast)
+            displayCharacterList(orderList: charsOrdered, showTurns: true)
             return
         }
     }
@@ -253,6 +261,7 @@ func characterCommands(command: [String]) -> Void {
             return
         }
         charsOrdered[characterIndex].removeStatus(stat: cmdLast)
+        displayCharacterList(orderList: charsOrdered, showTurns: true)
         return
     }
     
@@ -272,6 +281,8 @@ func characterCommands(command: [String]) -> Void {
             return
         }
         charsOrdered[characterIndex].addStatus(stat: cmdLast)
+        displayCharacterList(orderList: charsOrdered, showTurns: true)
+        return
     }
     
 

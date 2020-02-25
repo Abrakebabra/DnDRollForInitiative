@@ -170,6 +170,7 @@ class Characters {
                 let input: String? = readLine()
                 
                 if input == "r" {
+                    hitPoints = 0
                     inBattle(trueFalse: false)
                     awaitingInputA = false
                     
